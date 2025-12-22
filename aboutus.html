@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>మా గురించి | Bhagavad Gita</title>
+
+  <!-- Telugu Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    :root{
+      --gold:#c7922b;
+      --gold-dark:#8b4513;
+      --bg1:#fff7e6;
+      --bg2:#f1dfb8;
+      --card:#fffdf8;
+      --text:#2e2418;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Noto Sans Telugu',sans-serif;}
+
+    body{
+      min-height:100vh;
+      background:radial-gradient(circle at top,var(--bg1),var(--bg2));
+      color:var(--text);
+      display:flex;
+      justify-content:center;
+      padding:50px 16px;
+    }
+
+    .wrapper{
+      max-width:1200px;
+      width:100%;
+      background:rgba(255,255,255,0.72);
+      backdrop-filter:blur(18px);
+      border-radius:30px;
+      padding:60px 50px;
+      box-shadow:0 40px 120px rgba(0,0,0,0.2);
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Decorative glow */
+    .wrapper::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:linear-gradient(120deg,transparent,rgba(199,146,43,.35),transparent);
+      z-index:0;
+    }
+
+    header{
+      text-align:center;
+      margin-bottom:60px;
+      position:relative;
+      z-index:1;
+    }
+
+    header h1{
+      font-size:2.8rem;
+      color:var(--gold-dark);
+      letter-spacing:2px;
+    }
+
+    header p{
+      margin-top:12px;
+      font-size:1.05rem;
+      opacity:.85;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:45px;
+      position:relative;
+      z-index:1;
+    }
+
+    .card{
+      background:linear-gradient(180deg,#fff,#fff8ec);
+      border-radius:26px;
+      overflow:hidden;
+      box-shadow:0 20px 55px rgba(0,0,0,0.16);
+      transition:transform .45s ease,box-shadow .45s ease;
+      position:relative;
+    }
+
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg,transparent,rgba(199,146,43,.25),transparent);
+      opacity:0;
+      transition:.4s;
+      pointer-events:none;
+    }
+
+    .card:hover{
+      transform:translateY(-14px) scale(1.01);
+      box-shadow:0 35px 80px rgba(0,0,0,0.28);
+    }
+
+    .card:hover::after{opacity:1;}
+
+    .img-wrap{
+      position:relative;
+      height:320px;
+      overflow:hidden;
+    }
+
+    .img-wrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:transform .6s ease;
+    }
+
+    .card:hover img{transform:scale(1.08);}    
+
+    .badge{
+      position:absolute;
+      top:18px;
+      left:18px;
+      background:linear-gradient(135deg,var(--gold),#ffdd8a);
+      color:#3a2a10;
+      padding:6px 14px;
+      border-radius:999px;
+      font-size:.85rem;
+      font-weight:600;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+
+    .content{
+      padding:26px 26px 32px;
+    }
+
+    .content h2{
+      font-size:1.5rem;
+      color:#b86b1e;
+      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .content h2 i{color:var(--gold-dark);}    
+
+    .content p{
+      font-size:1.02rem;
+      line-height:1.95;
+      text-align:justify;
+      opacity:.95;
+    }
+
+.mail-btn{
+  display:inline-block;
+  margin-top:14px;
+  padding:12px 26px;
+  background:linear-gradient(135deg, #d35400, #ff8c1a);
+  color:#fff;
+  text-decoration:none;
+  border-radius:30px;
+  font-size:0.95rem;
+  font-weight:600;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  transition:transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mail-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(0,0,0,0.28);
+}
+
+    footer{
+      margin-top:70px;
+      text-align:center;
+      font-size:.95rem;
+      opacity:.85;
+      position:relative;
+      z-index:1;
+    }
+
+    footer span{
+      font-weight:700;
+      color:#b86b1e;
+    }
+
+    @media(max-width:640px){
+      .wrapper{padding:40px 24px;}
+      header h1{font-size:2.2rem;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+
+    <header>
+      <h1>మా గురించి</h1>
+      <p>భగవద్గీత – ధర్మం, జ్ఞానం, ఆధ్యాత్మిక మార్గం</p>
+    </header>
+
+    <div class="grid">
+
+      <!-- Parents -->
+      <div class="card">
+        <div class="img-wrap">
+          <span class="badge"><i class="fa-solid fa-heart"></i> తల్లిదండ్రులు</span>
+          <img src="parents.png" alt="నా తల్లిదండ్రులు">
+        </div>
+        <div class="content">
+          <h2><i class="fa-solid fa-people-roof"></i> కొల్లూరు వెంకటరమణ మూర్తి – విశాలాక్షి</h2>
+          <p>
+            నా తల్లిదండ్రులు నా జీవితానికి బలం, నమ్మకం మరియు ఆశీర్వాదం. నేను ముందుకు సాగేందుకు వారు ఎల్లప్పుడూ ప్రేమతో మార్గం చూపుతూ, ధైర్యం నింపుతూ ప్రోత్సహిస్తుంటారు.
+          </p>
+        </div>
+      </div>
+
+      <!-- Teacher -->
+      <div class="card">
+        <div class="img-wrap">
+          <span class="badge"><i class="fa-solid fa-award"></i> గురువు</span>
+          <img src="teacher.png" alt="నా భగవద్గీత గురువు">
+        </div>
+        <div class="content">
+          <h2><i class="fa-solid fa-book-open"></i> కొల్లూరు వసంత – స్వర్ణ పతక గ్రహీత</h2>
+          <p>
+            నాకు భగవద్గీతను నేర్పిన గురువు మరియు నా దొడ్డమ్మ. ఆమెకు భగవద్గీతలో విశిష్ట ప్రతిభకు గణపతి సచ్చిదానంద ఆశ్రమం ద్వారా స్వర్ణ పతకం ప్రదానం చేయబడింది.
+          </p>
+        </div>
+      </div>
+
+      <!-- Me -->
+      <div class="card">
+        <div class="img-wrap">
+          <span class="badge"><i class="fa-solid fa-laptop-code"></i> వెబ్‌సైట్ సృష్టికర్త</span>
+          <img src="me.jpg" alt="కొల్లూరు హర్ష వర్ధన్">
+        </div>
+        <div class="content">
+          <h2><i class="fa-solid fa-user"></i> కొల్లూరు హర్ష వర్ధన్</h2>
+          <p>
+            భగవద్గీతను నేర్చుకునే వారికి మరియు చదివే వారికి ఆధ్యాత్మికంగా, సులభంగా ఉపయోగపడేలా ఈ వెబ్‌సైట్‌ను నేను ప్రేమతో రూపొందించాను.
+          </p>
+        </div>
+      </div>
+<div><p style="margin-top:22px; font-size:0.95rem; color:#5c4a35;">
+  ఈ వెబ్‌సైట్లో ఏవైనా పద దోషాలు లేదా సూచనలు ఉంటే,
+  దయచేసి మాకు మెయిల్ ద్వారా తెలియజేయండి.
+</p>
+<a href="mailto:kolluruharshavardhanhindu@gmail.com?subject=భగవద్గీత వెబ్‌సైట్ సూచనలు"
+   class="mail-btn">
+  📧 Gmail ద్వారా మెయిల్ పంపండి
+</a>
+</div>
+    </div>
+
+    <footer>
+      <p>© 2026 <span>Harshavardhan | Bhagavad Gita</span> | ధర్మమే మార్గం</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
