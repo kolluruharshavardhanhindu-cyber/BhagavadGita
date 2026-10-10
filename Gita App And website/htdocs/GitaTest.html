@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+<meta name="theme-color" content="#eef2ff"/>
+<meta name="color-scheme" content="light dark"/>
+<meta name="description" content="Practise reciting Bhagavad Gita slokas: part of each verse is hidden, you recall the rest."/>
+<title>Bhagavad Gita – Sloka Test</title>
+<link rel="icon" type="image/webp" href="Krishna.webp">
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Serif+Telugu:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600&family=Noto+Serif+Devanagari:wght@400;500;600&family=Noto+Sans+Tamil:wght@400;600&family=Noto+Sans+Kannada:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Gujarati:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&family=Noto+Sans+Oriya:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+<script>
+/* Apply saved theme (light by default) + enable JS-only styles before first paint. */
+(function(){var d=document.documentElement;d.classList.add('js');var t='light';
+try{var s=localStorage.getItem('gitaTheme');if(s==='dark'||s==='light')t=s}catch(e){}
+d.setAttribute('data-theme',t);
+var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#070b1f':'#eef2ff');})();
+</script>
+<link rel="stylesheet" href="glass.css?v=03102026a">
+<link rel="stylesheet" href="v6.css?v=03102026a">
+<script src="glass.js?v=03102026a" defer></script>
+</head>
+<body class="gt-page" data-needs-data>
+<div id="appLoader" role="status" aria-live="polite">
+  <div class="loader-card glass">
+    <div class="loader-ring"><img src="Krishna.webp" alt="" width="56" height="56"></div>
+    <h2 data-loader-title>Opening the Gita…</h2>
+    <p data-loader-text>Preparing the sacred verses</p>
+    <div class="shimmer-line" aria-hidden="true"></div>
+    <button type="button" class="btn btn-primary btn-sm hidden" data-loader-retry onclick="location.reload()">
+      <span class="material-symbols-outlined" aria-hidden="true">refresh</span>Try again
+    </button>
+  </div>
+</div>
+
+<main id="main">
+<div class="page">
+
+  <div class="page-head reveal">
+    <span class="eyebrow">Practice</span>
+    <h1>Bhagavad Gita <span class="text-gradient">Sloka Test</span></h1>
+    <p>Part of a verse is hidden. Recall the rest, reveal it, and check yourself honestly.</p>
+  </div>
+
+  <div class="test-wrap">
+
+    <!-- Setup -->
+    <section class="test-setup glass reveal" aria-label="Test setup">
+
+      <fieldset class="setup-step">
+        <legend><span class="step-no">1</span>Difficulty Level</legend>
+        <div class="radio-grid">
+        <label class="radio-card">
+          <input type="radio" name="difficulty" value="beginner">
+          <span class="radio-card-body"><span class="radio-title">Beginner</span><span class="radio-desc">First stanza shown. Recall the second.</span></span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="difficulty" value="easy">
+          <span class="radio-card-body"><span class="radio-title">Easy</span><span class="radio-desc">Half of the first stanza shown.</span></span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="difficulty" value="intermediate">
+          <span class="radio-card-body"><span class="radio-title">Intermediate</span><span class="radio-desc">Half of the second stanza shown.</span></span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="difficulty" value="advanced">
+          <span class="radio-card-body"><span class="radio-title">Advanced</span><span class="radio-desc">Easy or Intermediate, chosen at random.</span></span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="difficulty" value="supreme">
+          <span class="radio-card-body"><span class="radio-title">Supreme</span><span class="radio-desc">Random chapter. Number kept hidden.</span></span>
+        </label>
+        </div>
+      </fieldset>
+
+      <div class="setup-step">
+        <label class="field-label" for="chapterSelect"><span class="step-no">2</span>Chapter</label>
+        <select id="chapterSelect" class="select">
+          <option value="" disabled selected>Select a chapter…</option>
+        </select>
+        <p id="chapterHelperText" class="helper-text hidden">
+          <span class="material-symbols-outlined" aria-hidden="true">casino</span>
+          <span>Supreme level picks a random chapter automatically — chapter selection is disabled.</span>
+        </p>
+      </div>
+
+      <div class="setup-actions">
+        <button id="generateBtn" type="button" class="btn btn-primary btn-lg">
+          <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>Generate
+        </button>
+        <span id="errorMsg" class="hidden" role="alert"></span>
+      </div>
+    </section>
+
+    <!-- Session -->
+    <div id="sessionBar" class="session-bar glass glass-2 hidden" aria-label="Session progress">
+      <div class="session-stats">
+        <div class="session-stat"><b id="statAsked">0</b><span>Questions</span></div>
+      </div>
+      <button id="finishBtn" type="button" class="btn btn-sm"><span class="material-symbols-outlined" aria-hidden="true">flag</span>Finish</button>
+      <button id="resetBtn" type="button" class="btn btn-sm btn-danger"><span class="material-symbols-outlined" aria-hidden="true">restart_alt</span>Reset</button>
+    </div>
+
+    <!-- Question -->
+    <section id="resultSection" class="question-card glass hidden" aria-live="polite">
+      <div class="question-meta">
+        <span id="difficultyLabel" class="chip chip-gold"></span>
+        <span id="chapterLabel" class="chip chip-blue"></span>
+        <span class="question-count">Question <b id="qNumber">1</b></span>
+      </div>
+
+      <div class="verse-panel">
+        <div id="firstStanzaHeading" class="gt-stanza-heading">First Stanza</div>
+        <div id="firstStanzaBox"></div>
+
+        <div id="secondStanzaHeading" class="gt-stanza-heading">Second Stanza</div>
+        <div id="secondStanzaBox"></div>
+
+        <div id="fullSlokaBox" class="hidden"></div>
+      </div>
+
+      <div class="question-actions">
+        <button id="viewBtn" type="button" class="btn btn-primary hidden">
+          <span class="material-symbols-outlined" aria-hidden="true">visibility</span><span id="viewBtnLabel">View</span>
+        </button>
+        <button id="nextBtn" type="button" class="btn hidden">
+          <span class="material-symbols-outlined icon-nudge" aria-hidden="true">arrow_forward</span>Next question
+        </button>
+      </div>
+
+
+    </section>
+
+    <!-- Results -->
+    <section id="resultsCard" class="results-card glass hidden" aria-live="polite">
+      <span class="state-icon"><span class="material-symbols-outlined" aria-hidden="true">self_improvement</span></span>
+      <h2 id="resTitle">Session complete</h2>
+      <p id="resText"></p>
+      <div class="results-split">
+        <div class="session-stat"><b id="resPracticed">0</b><span>Verses practised</span></div>
+      </div>
+      <div class="state-actions">
+        <button id="keepBtn" type="button" class="btn btn-primary"><span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>Keep practising</button>
+        <button id="newSessionBtn" type="button" class="btn"><span class="material-symbols-outlined" aria-hidden="true">restart_alt</span>New session</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+</main>
+
+<noscript><div class="glass noscript-note">This site needs JavaScript to run the test.</div></noscript>
+
+<!-- gita-data.js defines gitaData; app.js defines languageData, chapterNames, getLangData(), currentLang -->
+<script src="gita-data.js?v=03102026a"></script>
+<script src="app.js?v=03102026a"></script>
+<script src="gitatest.js?v=03102026a"></script>
+</body>
+</html>

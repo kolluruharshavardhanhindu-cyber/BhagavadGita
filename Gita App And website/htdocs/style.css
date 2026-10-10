@@ -1,0 +1,248 @@
+/* (legacy rotating background glyph removed — ambient scene lives in v6.css) */
+body{
+  background:
+    radial-gradient(circle at top,rgba(236,103,19,.15),transparent 60%),
+    linear-gradient(#fffaf0,#f3e2c7);
+  font-family:'Manrope','Noto Sans Telugu',sans-serif;
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+.fade{ animation:fadeIn .8s ease both; }
+
+.card{
+  position: relative;
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.65);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Shining layer */
+.card::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 35%,
+    rgba(255,165,0,0.15),
+    transparent 55%
+  );
+  animation: shine 2.2s linear infinite;
+  pointer-events: none;
+}
+
+/* Optional: stronger glow on hover */
+.card:hover{
+  transform: translateY(-6px) scale(1.04);
+  box-shadow:
+    0 20px 45px rgba(236,103,19,.55),
+    inset 0 0 30px rgba(255,165,0,.4);
+  transition: .35s ease;
+}
+
+/* Shine movement */
+@keyframes shine{
+  from{ transform: translateX(-100%); }
+  to{ transform: translateX(100%); }
+}
+
+/* Sloka audio button */
+.sloka-audio-btn{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(236,103,19,0.95);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  transition: transform .2s ease, box-shadow .2s ease;
+  z-index: 10;
+}
+
+.sloka-audio-btn:hover{
+  transform: scale(1.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+
+/* ── తాత్పర్యం button ─────────────────────── */
+.tatparyam-btn{
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  height: 22px;
+  padding: 0 12px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: #fff;
+  font-family: 'Noto Sans Telugu', 'Manrope', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(124,58,237,.40);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+  z-index: 10;
+  border: none;
+  outline: none;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.tatparyam-btn:hover{
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(124,58,237,.55);
+  background: linear-gradient(135deg, #6d28d9, #9333ea);
+}
+
+.tatparyam-btn .btn-icon{
+  font-family: 'Material Symbols Outlined';
+  font-size: 16px;
+  line-height: 1;
+}
+
+
+.tatparyam-btn.loading .btn-icon{
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+/* Meaning panel that appears below sloka */
+.tatparyam-panel{
+  display: none;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,
+    rgba(237,233,254,0.95) 0%,
+    rgba(221,214,254,0.9) 100%);
+  border-left: 4px solid #7c3aed;
+  font-family: 'Noto Sans Telugu', 'Manrope', sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: #3b1f6e;
+  box-shadow: 0 4px 16px rgba(124,58,237,.15);
+  animation: fadeIn 0.4s ease;
+}
+
+.tatparyam-panel.visible{
+  display: block;
+}
+
+.tatparyam-panel-header{
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: #7c3aed;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* make sloka-box relative */
+.sloka-box{
+  position: relative;
+  padding-top: 2.5rem;  /* space for audio button */
+  padding-bottom: 3rem; /* space for తాత్పర్యం button */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.sloka-box{
+  background:
+    radial-gradient(circle at center,
+      rgba(255, 244, 220, 0.95) 0%,
+      rgba(246, 234, 215, 0.85) 25%,
+      rgba(222, 190, 140, 0.6) 45%,
+      rgba(180, 140, 90, 0.35) 65%,
+      rgba(150, 110, 70, 0.2) 100%
+    ),
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(255,255,255,0.12) 0deg 2deg,
+      rgba(0,0,0,0.08) 2deg 4deg
+    ),
+    radial-gradient(circle at center,
+      #f6ead7 0%,
+      #e6cfa3 40%,
+      #c89b5a 75%,
+      #a8743d 100%
+    );
+  background-blend-mode: screen, overlay, normal;
+  background-size: cover;
+  padding: 1rem;
+  border-radius: .75rem;
+  text-align: center;
+  box-shadow:
+    inset 0 0 25px rgba(0,0,0,.12),
+    0 6px 18px rgba(0,0,0,.15);
+  color: #3b2a18;
+  font-size: clamp(1rem, 3.5vw, 1.35rem);
+}
+
+/* ── Play All controls ─────────────────────── */
+.play-all-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 16px;
+  border-radius:9999px;
+  background: linear-gradient(135deg, #ec6713, #f59e42);
+  color:#fff;
+  font-weight:700;
+  font-size:0.85rem;
+  cursor:pointer;
+  border:none;
+  outline:none;
+  box-shadow:0 4px 12px rgba(236,103,19,.4);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.play-all-btn:hover{
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(236,103,19,.55);
+}
+.play-all-btn.armed{
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  box-shadow:0 4px 12px rgba(22,163,74,.45);
+}
+
+.play-all-stop-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#b91c1c;
+  color:#fff;
+  border:none;
+  outline:none;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(185,28,28,.4);
+  transition: transform .2s ease;
+}
+.play-all-stop-btn:hover{ transform: scale(1.1); }
+
+/* Currently playing sloka in a Play All sequence */
+.sloka-playing{
+  outline: 3px solid #ec6713;
+  outline-offset: 3px;
+}
+
+/* Play All / range-player popup styles live in v6.css (single implementation). */
