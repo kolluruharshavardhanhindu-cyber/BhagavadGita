@@ -1,0 +1,336 @@
+/* ═══════════════════════════════════════════════════════════
+   GLASS DESIGN SYSTEM — Bhagavad Gita
+   Loaded after style.css on every page. Visual layer only:
+   no markup, data or logic depends on it.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --bg-primary:#070b1f; --bg-secondary:#0d1433;
+  --glass-bg:rgba(20,28,66,.55); --glass-bg-strong:rgba(16,22,56,.82); --glass-bg-soft:rgba(255,255,255,.06);
+  --glass-border:rgba(255,255,255,.14); --glass-hi:rgba(255,255,255,.22);
+  --text-primary:#f1f3ff; --text-secondary:#b4bbdf; --text-scripture:#fff8e8;
+  --accent-blue:#6aa7ff; --accent-gold:#f2c76e; --accent-saffron:#ff9a3d; --accent-violet:#9b8cff;
+  --grad-primary:linear-gradient(135deg,#ff9a3d,#f2c76e); --grad-secondary:linear-gradient(135deg,#6aa7ff,#9b8cff);
+  --shadow-soft:0 10px 40px rgba(0,0,0,.35); --shadow-glow:0 0 40px rgba(242,199,110,.22);
+  --radius-sm:12px; --radius-md:18px; --radius-lg:26px; --radius-xl:34px;
+  --blur:blur(22px) saturate(150%);
+  --ease:cubic-bezier(.22,.8,.3,1);
+  --font-ui:'Manrope','Noto Sans Telugu','Noto Sans Devanagari',system-ui,sans-serif;
+  --font-scripture:'Noto Serif Telugu','Noto Serif Devanagari','Noto Sans Telugu','Manrope',serif;
+}
+:root[data-theme="light"]{
+  --bg-primary:#eef2ff; --bg-secondary:#fdf3e1;
+  --glass-bg:rgba(255,255,255,.62); --glass-bg-strong:rgba(255,255,255,.88); --glass-bg-soft:rgba(40,50,120,.06);
+  --glass-border:rgba(60,70,140,.16); --glass-hi:rgba(255,255,255,.9);
+  --text-primary:#1b2147; --text-secondary:#4e5788; --text-scripture:#2a1d0b;
+  --accent-blue:#2f6fe0; --accent-gold:#b7791f; --accent-saffron:#e8590c; --accent-violet:#6d4fe0;
+  --shadow-soft:0 10px 34px rgba(40,50,120,.16); --shadow-glow:0 0 36px rgba(232,89,12,.16);
+}
+
+html{scroll-behavior:smooth}
+*,*::before,*::after{-webkit-tap-highlight-color:transparent}
+body{
+  font-family:var(--font-ui)!important; color:var(--text-primary)!important;
+  background:
+    radial-gradient(900px 600px at 15% -10%,rgba(106,167,255,.22),transparent 60%),
+    radial-gradient(800px 560px at 100% 10%,rgba(242,199,110,.14),transparent 60%),
+    radial-gradient(900px 700px at 50% 120%,rgba(155,140,255,.18),transparent 60%),
+    linear-gradient(180deg,var(--bg-primary),var(--bg-secondary))!important;
+  background-attachment:fixed!important;
+  padding-top:92px; padding-bottom:24px; min-height:100vh; overflow-x:hidden;
+}
+/* Ambient background (blobs, particles, grain) is provided by the V6 .scene layer in v6.css */
+
+/* ── Floating header ─────────────────────────────── */
+.g-header{
+  position:fixed; z-index:50; top:12px; left:50%; transform:translateX(-50%);
+  width:min(1120px,calc(100% - 24px)); padding:8px 10px 8px 16px;
+  display:flex; align-items:center; gap:14px;
+  background:var(--glass-bg); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border); border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-soft), inset 0 1px 0 var(--glass-hi);
+  transition:background .3s var(--ease), top .3s var(--ease);
+}
+.g-header.scrolled{background:var(--glass-bg-strong);top:8px}
+.g-brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--text-primary);text-decoration:none;white-space:nowrap}
+.g-brand img{width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--accent-gold),var(--shadow-glow)}
+.g-nav{display:flex;gap:4px;margin-left:auto}
+.g-nav a{
+  padding:8px 14px;border-radius:999px;color:var(--text-secondary);font-weight:700;font-size:.85rem;text-decoration:none;
+  transition:background .25s var(--ease),color .25s var(--ease);
+}
+.g-nav a:hover,.g-nav a[aria-current="page"]{background:var(--glass-bg-soft);color:var(--text-primary)}
+.g-icon-btn{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none;
+  background:var(--glass-bg-soft);color:var(--text-primary);border:1px solid var(--glass-border);
+  transition:transform .25s var(--ease),background .25s var(--ease);
+}
+.g-icon-btn:hover{transform:translateY(-2px);background:var(--glass-hi)}
+.g-icon-btn .material-symbols-outlined{font-size:20px}
+.g-burger{display:none}
+.g-progress{position:absolute;left:22px;right:22px;bottom:-1px;height:2px;border-radius:2px;overflow:hidden;pointer-events:none}
+.g-progress b{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(0);background:var(--grad-primary)}
+@media(max-width:760px){
+  .g-burger{display:grid}
+  .g-header #gTheme{margin-left:auto}
+  .g-nav{
+    position:absolute;top:calc(100% + 10px);left:0;right:0;margin:0;flex-direction:column;padding:10px;
+    background:var(--bg-secondary);
+    border:1px solid var(--glass-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);
+    opacity:0;transform:translateY(-8px) scale(.98);pointer-events:none;visibility:hidden;
+    transition:opacity .25s var(--ease),transform .25s var(--ease),visibility .25s;
+  }
+  .g-nav.open{opacity:1;transform:none;pointer-events:auto;visibility:visible}
+  .g-nav a{padding:14px 16px;font-size:1rem}
+  .g-brand span{font-size:.95rem}
+}
+
+/* ── Headings & hero ─────────────────────────────── */
+#home>h1{
+  font-size:clamp(2rem,5.5vw,3.6rem)!important;line-height:1.15;letter-spacing:-.02em;margin-bottom:1rem!important;
+  background:linear-gradient(120deg,#fff 10%,var(--accent-gold) 55%,var(--accent-saffron));-webkit-background-clip:text;background-clip:text;
+  color:transparent!important;filter:drop-shadow(0 4px 24px rgba(242,199,110,.25));
+}
+:root[data-theme="light"] #home>h1{background:linear-gradient(120deg,#1b2147,#b7791f 60%,#e8590c);-webkit-background-clip:text;background-clip:text}
+#home>h1::after{content:"ॐ";display:block;margin-top:6px;font-size:.5em;color:var(--accent-gold);-webkit-text-fill-color:var(--accent-gold);opacity:.8}
+h1,h2,h3{color:var(--text-primary)}
+
+/* ── Buttons (all variants) ──────────────────────── */
+button,.mail-btn,select{font-family:var(--font-ui)}
+#home button,#home a#gitaAppBtn,#viewer>div>button{
+  background:var(--glass-bg-soft)!important;color:var(--text-primary)!important;
+  border:1px solid var(--glass-border)!important;border-radius:999px;
+  box-shadow:inset 0 1px 0 var(--glass-hi),0 6px 20px rgba(0,0,0,.18)!important;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease)!important;
+  min-height:44px;
+}
+#home button:hover,#home a#gitaAppBtn:hover,#viewer>div>button:hover{
+  transform:translateY(-2px)!important;background:var(--glass-hi)!important;
+  box-shadow:inset 0 1px 0 var(--glass-hi),var(--shadow-glow)!important;
+}
+#home button:active,#home a#gitaAppBtn:active,.play-all-btn:active{transform:translateY(0) scale(.98)!important}
+/* primary */
+#home button.bg-saffron,.play-all-btn{
+  background:var(--grad-primary)!important;color:#2a1700!important;border:0!important;font-weight:800;
+  box-shadow:0 8px 26px rgba(255,154,61,.38),inset 0 1px 0 rgba(255,255,255,.5)!important;
+}
+.play-all-btn:hover{box-shadow:0 12px 34px rgba(255,154,61,.5)!important;transform:translateY(-2px)}
+/* ghost / back */
+#viewer>div>button:first-child{background:transparent!important;box-shadow:none!important;color:var(--accent-gold)!important;padding-inline:14px}
+/* danger / stop */
+.play-all-stop-btn{background:rgba(220,70,80,.85)!important;box-shadow:0 6px 18px rgba(220,70,80,.35)!important}
+.play-all-btn.armed{background:linear-gradient(135deg,#34d399,#6ee7b7)!important;color:#053b2a!important}
+/* focus */
+:where(a,button,select,input,.card):focus-visible{outline:2px solid var(--accent-gold);outline-offset:3px;border-radius:999px}
+.card:focus-visible{border-radius:var(--radius-lg)}
+
+/* ── Language select / form controls ─────────────── */
+#langSelect{
+  background:var(--glass-bg)!important;color:var(--text-primary)!important;border:1px solid var(--glass-border)!important;
+  border-radius:999px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);min-height:44px;
+  box-shadow:inset 0 1px 0 var(--glass-hi),0 6px 20px rgba(0,0,0,.16)!important;
+}
+#langSelect:focus{border-color:var(--accent-gold)!important;outline:none;box-shadow:0 0 0 3px rgba(242,199,110,.25)!important}
+select option{background:var(--bg-secondary);color:var(--text-primary)}
+
+/* ── Chapter cards ───────────────────────────────── */
+#chapterGrid{gap:18px!important}
+.card{
+  --mx:50%;--my:50%;
+  background:var(--glass-bg)!important;color:var(--text-primary)!important;
+  border:1px solid var(--glass-border);border-radius:var(--radius-lg)!important;
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  box-shadow:var(--shadow-soft),inset 0 1px 0 var(--glass-hi)!important;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s var(--ease)!important;
+  cursor:pointer;
+}
+#chapterGrid .card{height:9.5rem!important}
+.card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;animation:none!important;
+  background:radial-gradient(220px circle at var(--mx) var(--my),rgba(242,199,110,.22),transparent 60%);
+  opacity:0;transform:none!important;transition:opacity .3s;
+}
+.card:hover{transform:translateY(-6px) scale(1.02)!important;border-color:rgba(242,199,110,.55);box-shadow:var(--shadow-soft),var(--shadow-glow)!important}
+.card:hover::before{opacity:1}
+.card:active{transform:translateY(-2px) scale(.99)!important}
+.card .text-saffron{color:var(--accent-gold)!important}
+.card .material-symbols-outlined{transition:transform .35s var(--ease)}
+.card:hover .material-symbols-outlined{transform:scale(1.15) rotate(-4deg)}
+.card .text-sm{color:var(--text-primary)}
+#chapterGrid .card:nth-child(n){animation:g-rise .6s var(--ease) both}
+@keyframes g-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.fade{animation:g-rise .6s var(--ease) both}
+
+/* ── Sloka reading panel ─────────────────────────── */
+/* Back / Play All / Stop bar stays reachable while Play All scrolls through the slokas */
+#viewer>div:first-child{
+  position:sticky;top:76px;z-index:30;padding:8px 10px;margin:0 0 16px!important;
+  background:var(--glass-bg-strong);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);border-radius:999px;box-shadow:var(--shadow-soft);
+}
+#viewer{
+  background:var(--glass-bg)!important;backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);border-radius:var(--radius-xl)!important;
+  box-shadow:var(--shadow-soft),inset 0 1px 0 var(--glass-hi)!important;
+  padding:clamp(16px,4vw,36px)!important;margin-top:8px!important;
+}
+#chapterTitle{
+  font-size:clamp(1.3rem,3.4vw,1.9rem)!important;letter-spacing:-.01em;
+  background:linear-gradient(120deg,var(--text-primary),var(--accent-gold));-webkit-background-clip:text;background-clip:text;color:transparent!important;
+}
+.sloka-box{
+  background:var(--glass-bg-soft)!important;background-blend-mode:normal!important;
+  border:1px solid var(--glass-border);border-radius:var(--radius-md)!important;
+  color:var(--text-scripture)!important;font-family:var(--font-scripture);
+  font-size:clamp(1.05rem,3.6vw,1.4rem)!important;line-height:2!important;
+  padding:2.8rem 1.1rem 3.4rem!important;
+  box-shadow:inset 0 1px 0 var(--glass-hi),0 8px 28px rgba(0,0,0,.2)!important;
+  transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;
+}
+.sloka-box:hover{border-color:rgba(242,199,110,.4)}
+.sloka-box.sloka-playing,.sloka-playing{
+  border-color:var(--accent-gold)!important;background:rgba(242,199,110,.12)!important;
+  box-shadow:0 0 0 1px var(--accent-gold),var(--shadow-glow)!important;
+}
+.sloka-box > *{color:inherit}
+.sloka-audio-btn{
+  width:42px!important;height:42px!important;background:var(--grad-primary)!important;color:#2a1700!important;
+  box-shadow:0 6px 18px rgba(255,154,61,.4)!important;
+}
+.tatparyam-btn{
+  height:28px!important;font-size:.7rem!important;font-weight:700!important;
+  background:var(--glass-bg-soft)!important;color:var(--accent-violet)!important;border:1px solid var(--glass-border)!important;
+  box-shadow:none!important;backdrop-filter:blur(10px);
+}
+.tatparyam-btn:hover{background:var(--glass-hi)!important;transform:translateY(-1px)!important}
+.tatparyam-panel{
+  background:var(--glass-bg-strong)!important;color:var(--text-primary)!important;
+  border:1px solid var(--glass-border);border-left:3px solid var(--accent-violet);box-shadow:var(--shadow-soft)!important;
+}
+.tatparyam-panel-header{color:var(--accent-violet)!important}
+
+/* ── About / Inspiration pages ───────────────────── */
+.wrapper,.container{
+  background:var(--glass-bg)!important;backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border)!important;border-radius:var(--radius-xl)!important;
+  box-shadow:var(--shadow-soft),inset 0 1px 0 var(--glass-hi)!important;animation:g-rise .7s var(--ease) both!important;
+}
+.wrapper::before,.container::before{display:none!important}
+body:has(.wrapper),body:has(.container){display:block!important;padding-inline:12px}
+.wrapper,.container{margin-inline:auto}
+.wrapper .card{cursor:default}
+.wrapper .card:hover{transform:translateY(-8px)!important}
+header h1,header p,.content h2,.content p,.container h1,.subtitle,.profile-name,.profile-role,.highlight,.footer,footer,footer *{color:var(--text-primary)!important}
+header p,.subtitle,.content p,.profile-role,.footer{color:var(--text-secondary)!important}
+header h1,.container h1{background:linear-gradient(120deg,var(--text-primary),var(--accent-gold));-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.content h2,.content h2 i,.badge{color:var(--accent-gold)!important}
+.badge{background:var(--glass-bg-strong)!important;border:1px solid var(--glass-border)}
+.mail-btn{background:var(--grad-primary)!important;color:#2a1700!important;border-radius:999px!important;box-shadow:0 8px 26px rgba(255,154,61,.38)!important;transition:transform .25s var(--ease)}
+.mail-btn:hover{transform:translateY(-2px)}
+.divider{background:var(--grad-primary)!important}
+
+/* ── Footer ──────────────────────────────────────── */
+.g-footer{
+  width:min(1120px,calc(100% - 24px));margin:40px auto 0;padding:22px 24px;
+  display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between;
+  background:var(--glass-bg);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-soft),inset 0 1px 0 var(--glass-hi);
+  color:var(--text-secondary);font-size:.85rem;
+}
+.g-footer b{color:var(--text-primary)} .g-footer nav{display:flex;gap:6px 16px;flex-wrap:wrap}
+.g-footer a{color:var(--text-secondary);text-decoration:none;font-weight:700} .g-footer a:hover{color:var(--accent-gold)}
+.g-footer .g-sans{flex-basis:100%;font-size:.78rem;opacity:.8}
+
+/* ── Scroll reveal, scrollbars, a11y ─────────────── */
+.g-reveal{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.g-reveal.in{opacity:1;transform:none}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-thumb{background:var(--glass-border);border-radius:10px}
+::selection{background:rgba(242,199,110,.35)}
+.hidden{display:none!important}
+
+@media(max-width:640px){
+  body{padding-top:84px}
+  #home{padding:14px!important}
+  #home>div{margin-bottom:1.4rem!important}
+  #home button,#home a#gitaAppBtn{flex:1 1 auto}
+  #chapterGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+  #chapterGrid .card{height:8.5rem!important}
+  .g-footer{flex-direction:column;align-items:flex-start}
+  .wrapper,.container{padding:32px 18px!important}
+  .circle-wrapper{gap:32px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .g-reveal{opacity:1;transform:none}
+}
+
+
+/* ═══ Mobile app / Android WebView hardening ═══════════════════════ */
+:root{--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px)}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+button,a,.card,#slokaContainer>div{touch-action:manipulation}
+@supports (min-height:100dvh){body{min-height:100dvh}}
+body{padding-left:var(--safe-left);padding-right:var(--safe-right);padding-bottom:calc(24px + var(--safe-bottom))}
+
+/* header: never sits above the status bar / notch, never gets cropped */
+.g-header{top:calc(12px + var(--safe-top));width:min(1120px,calc(100% - 24px - var(--safe-left) - var(--safe-right)));max-width:calc(100vw - 16px)}
+.g-header.scrolled{top:calc(8px + var(--safe-top))}
+.g-brand{min-width:0;flex:0 1 auto}
+.g-brand span{overflow:hidden;text-overflow:ellipsis}
+body{padding-top:calc(92px + var(--safe-top))}
+#viewer>div:first-child{top:calc(76px + var(--safe-top))}
+@media(max-width:760px){
+  .g-header{gap:8px;padding:6px 8px 6px 12px}
+  .g-nav{max-height:calc(100vh - 96px - var(--safe-top));max-height:calc(100dvh - 96px - var(--safe-top));overflow-y:auto;overscroll-behavior:contain}
+  .g-nav a{min-height:44px;display:flex;align-items:center}
+}
+@media(max-width:640px){body{padding-top:calc(84px + var(--safe-top))}}
+@media(max-width:360px){.g-brand span{font-size:.85rem}.g-brand img{width:30px;height:30px}.g-icon-btn{width:38px;height:38px}}
+@media(max-height:480px) and (orientation:landscape){
+  body{padding-top:calc(72px + var(--safe-top))}
+  #viewer>div:first-child{position:static}
+}
+
+/* ═══ Contact card (About / Inspiration) ═══════════════════════════ */
+.contact-card{
+  margin:28px auto 0;max-width:560px;padding:20px 18px;text-align:center;
+  background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-xl,24px);
+  box-shadow:var(--shadow-soft);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+}
+.contact-card h3{font-size:1rem;font-weight:800;margin:0 0 4px;color:var(--text-primary)!important}
+.contact-card .contact-name{font-size:1.15rem;font-weight:800;margin:0 0 14px;color:var(--text-primary)!important}
+.contact-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.c-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:10px 20px;border-radius:999px;
+  font-weight:700;font-size:.95rem;line-height:1.2;text-decoration:none;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+}
+.c-btn:hover{transform:translateY(-2px)}
+.c-btn svg{flex:none}
+.c-gmail{background:#fff;color:#3c4043!important;border:1px solid #dadce0;box-shadow:0 2px 10px rgba(60,64,67,.25)}
+.c-call{background:linear-gradient(135deg,#d35400,#ff8c1a);color:#fff!important;box-shadow:0 6px 16px rgba(211,84,0,.3)}
+.contact-email{margin:14px 0 0;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem;color:var(--text-secondary)!important}
+.contact-addr{word-break:break-all;user-select:all;-webkit-user-select:all}
+.c-copy{min-height:36px;padding:4px 14px;border-radius:999px;border:1px solid var(--glass-border);background:var(--glass-bg-soft);color:var(--text-primary);font-weight:700;cursor:pointer}
+.mail-fallback{margin:12px 0 0;font-size:.88rem;color:var(--text-secondary)!important}
+.mail-fallback[hidden]{display:none}
+.mail-fallback a{color:var(--accent-violet,#6b5bd6)!important;font-weight:700;text-decoration:underline}
+@media(max-width:480px){.contact-actions{flex-direction:column}.c-btn{width:100%}}
+
+/* footer contact line */
+.g-footer .g-contact{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-top:8px;font-size:.9rem}
+.g-footer .g-contact a{display:inline-flex;align-items:center;gap:6px;color:inherit;text-decoration:none;min-height:32px}
+.g-footer .g-contact svg{flex:none}
+
+/* double-tap hint */
+.dbl-hint{display:flex;align-items:center;gap:8px;margin:-8px 0 16px;padding:8px 14px;border-radius:999px;font-size:.85rem;font-weight:600;line-height:1.35;
+  background:var(--glass-bg-soft);border:1px dashed var(--glass-border);color:var(--text-secondary)}
+.dbl-hint .material-symbols-outlined{font-size:20px;color:var(--accent-gold);flex:none}
+@keyframes dblPulse{0%,100%{box-shadow:0 0 0 0 rgba(242,160,60,0)}40%{box-shadow:0 0 0 6px rgba(242,160,60,.45)}}
+.dbl-pulse{animation:dblPulse 1.3s ease-in-out 2}
+@media(prefers-reduced-motion:reduce){.dbl-pulse{animation:none}}
+
+/* Gita App download link: match sibling pill buttons */
+#home a#gitaAppBtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none!important;font-weight:700;font-size:.875rem;padding:.5rem 1rem;cursor:pointer}
+#home a#gitaAppBtn .material-symbols-outlined{font-size:18px;vertical-align:baseline!important}
+.gita-app-hint{width:100%;text-align:center;font-size:.8rem;opacity:.75;margin-top:2px}
