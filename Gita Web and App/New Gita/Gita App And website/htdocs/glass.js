@@ -135,8 +135,7 @@
       ['index.html','Home','home'],
       ['GitaTest.html','Sloka Test','quiz'],
       ['inspiration.html','Inspiration','auto_awesome'],
-      ['aboutus.html','About','info'],
-      ['gita-app/index.html','Gita App','apps']
+      ['aboutus.html','About','info']
     ];
     var h = document.createElement('header');
     h.className = 'g-header'; h.setAttribute('role','banner');

@@ -23,6 +23,9 @@ function lsGet(k, d){ try { var v = localStorage.getItem(k); return v == null ? 
 function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 function lang(){ return G('currentLang') || 'te'; }
 function slokaWord(){ var s = G('slokaLabel'); return (s && s[lang()]) || 'Sloka'; }
+/* plural used after a count. Hindi, Bengali and Odia use the bare noun after a number ("47 श्लोक"). */
+var SLOKAS = { te:'శ్లోకాలు', en:'Slokas', hi:'श्लोक', ta:'சுலோகங்கள்', kn:'ಶ್ಲೋಕಗಳು', ml:'ശ്ലോകങ്ങൾ', gu:'શ્લોકો', bn:'শ্লোক', or:'ଶ୍ଲୋକ' };
+function slokaCount(n){ return n + ' ' + (n === 1 ? slokaWord() : (SLOKAS[lang()] || 'Slokas')); }
 
 /* ─── scramble decode ─── */
 function scramble(el, text, dur){
@@ -324,7 +327,7 @@ function initHome(){
       var pct = chTotal(n) ? Math.round(readCount(n) / chTotal(n) * 100) : 0;
       html += '<a href="#chapter-' + n + '" class="card" data-ch="' + n + '" style="--i:' + n + '"><span class="n">' + (n < 10 ? '0' : '') + n + '</span>' +
         '<span class="go" aria-hidden="true">Read<span class="material-symbols-outlined">arrow_forward</span></span>' +
-        '<span><span class="nm">' + esc(nm) + '</span><span class="c">' + chTotal(n) + ' ' + esc(slokaWord()) + '</span><span class="bar"><i style="--w:' + pct + '%"></i></span></span></a>';
+        '<span><span class="nm">' + esc(nm) + '</span><span class="c">' + esc(slokaCount(chTotal(n))) + '</span><span class="bar"><i style="--w:' + pct + '%"></i></span></span></a>';
     }
     grid.innerHTML = html;
     grid.classList.remove('in'); void grid.offsetWidth; grid.classList.add('in');
@@ -545,8 +548,17 @@ function initReader(){
     var idx = Array.prototype.indexOf.call(box.children, div), num = viewNum();
     div._num = num; div._idx = idx;
     div.style.setProperty('--i', Math.min(idx, 8));
-    var no = document.createElement('div'); no.className = 'd-no'; no.innerHTML = medal + '<span>' + (idx + 1) + '</span>';
-    div.insertBefore(no, div.firstChild);
+    div.setAttribute('data-no', idx + 1);
+    var spec = window.isSpecialView && isSpecialView(num), cn = (G('chapterNames') || {})[lang()] || [];
+    var sub = spec ? getSpecialLabel(num) : ('Chapter ' + num + (cn[num - 1] ? ' · ' + cn[num - 1] : ''));
+    var head = document.createElement('div'); head.className = 'd-head';
+    head.innerHTML = '<div class="d-no">' + medal + '<span>' + (idx + 1) + '</span></div>' +
+      '<div class="d-meta"><span class="d-label">' + esc(slokaWord()) + ' ' + (idx + 1) + '</span><span class="d-sub">' + esc(sub) + '</span></div>';
+    div.insertBefore(head, div.firstChild);
+    ['tl', 'tr', 'bl', 'br'].forEach(function(c){ var k = document.createElement('span'); k.className = 'd-corner ' + c; k.setAttribute('aria-hidden', 'true'); div.appendChild(k); });
+    var orn = document.createElement('div'); orn.className = 'd-orn'; orn.setAttribute('aria-hidden', 'true');
+    orn.innerHTML = '<i></i><svg viewBox="0 0 40 20"><path d="M20 2C16 7 16 13 20 18C24 13 24 7 20 2Z"/><path d="M20 18C14 16 9 12 6 7C12 7 17 11 20 18Z"/><path d="M20 18C26 16 31 12 34 7C28 7 23 11 20 18Z"/></svg><i></i>';
+    div.appendChild(orn);
     var txt = null;
     Array.prototype.forEach.call(div.children, function(c){ if(!txt && c.tagName === 'DIV' && !c.className) txt = c; });
     var raw = slokaText(num, idx);
@@ -555,7 +567,7 @@ function initReader(){
       var words = String(raw).replace(/\n\s*/g, '\n').trim().split('\n').map(function(line){
         return line.split(/(\s+)/).map(function(t){ return t.trim() ? '<span class="w">' + esc(t) + '</span>' : t; }).join('');
       }).join('\n');
-      txt.innerHTML = '<span class="d-label">' + esc(slokaWord()) + ' ' + (idx + 1) + '</span><span class="d-text">' + words + '</span>';
+      txt.innerHTML = '<span class="d-text">' + words + '</span>';
     }
     var viz = document.createElement('div'); viz.className = 'd-viz'; viz.setAttribute('aria-hidden', 'true');
     viz.innerHTML = new Array(17).join('<i></i>');
