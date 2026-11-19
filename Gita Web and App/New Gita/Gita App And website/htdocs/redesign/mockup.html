@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070514">
+<title>Gita Redesign Mockup</title>
+<meta name="description" content="Interactive mockup of the redesigned, fully animated Bhagavad Gita website — every new feature and motion pattern on one page.">
+<script>
+/* theme before first paint: saved choice → system preference */
+(function(){var t;try{t=localStorage.getItem('gitaRedesignTheme')}catch(e){}
+if(t!=='dark'&&t!=='light'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}
+document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link rel="icon" type="image/webp" href="../Krishna.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;600;700;800&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Serif+Telugu:wght@400;600;700&family=Noto+Serif+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400..500,0..1,0&display=block" rel="stylesheet">
+<link rel="stylesheet" href="mockup.css">
+</head>
+<body class="is-loading">
+
+<!-- ═══ 0 · Cinematic intro ═══ -->
+<div id="intro" aria-hidden="true">
+  <div class="curtain l"></div><div class="curtain r"></div>
+  <div class="om-wrap">
+    <svg viewBox="0 0 200 200">
+      <g id="introPetals"></g>
+      <text class="om" x="100" y="140" text-anchor="middle">ॐ</text>
+    </svg>
+  </div>
+  <div class="intro-caption">Opening the Gita</div>
+</div>
+
+<div class="backdrop"></div>
+<div class="grain"></div>
+<canvas id="cosmos" aria-hidden="true"></canvas>
+<canvas id="petals" aria-hidden="true"></canvas>
+<div class="cursor"></div><div class="cursor-dot"></div>
+<div class="progress"><i id="progBar"></i></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<!-- ═══ top bar ═══ -->
+<header class="topbar" id="topbar">
+  <a class="brand" href="#hero"><img src="../Krishna.webp" alt=""><span class="t">Bhagavad Gita</span></a>
+  <nav class="nav" id="nav" aria-label="Sections">
+    <span class="pill"></span>
+    <a href="#chapters">Chapters</a>
+    <a href="#reader">Read</a>
+    <a href="#test">Sloka Test</a>
+    <a href="#dhyana">Dhyana</a>
+    <a href="#lineage">About</a>
+  </nav>
+  <button class="icon-btn" id="calmBtn" aria-pressed="false" title="Pause ambient motion" aria-label="Pause ambient motion"><span class="msi">motion_photos_on</span></button>
+  <button class="icon-btn theme-toggle" id="themeBtn" aria-label="Switch between day and night theme" title="Day / Night">
+    <svg viewBox="0 0 24 24" fill="none">
+      <mask id="moonM"><rect x="-4" y="-4" width="32" height="32" fill="#fff"/><circle class="moon-mask" cx="24" cy="2" r="7" fill="#000"/></mask>
+      <circle class="sun-core" cx="12" cy="12" r="6" fill="currentColor" mask="url(#moonM)"/>
+      <g class="rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M4.6 19.4L6 18M18 6l1.4-1.4"/></g>
+    </svg>
+  </button>
+</header>
+
+<!-- feature tour rail -->
+<nav class="tour" id="tour" aria-label="Feature tour"></nav>
+
+<main>
+<!-- ═══ 1 · HERO ═══ -->
+<section class="hero" id="hero" data-tour="Hero">
+  <div>
+    <span class="eyebrow">Feature 01 · Living hero</span>
+    <h1 id="heroTitle" aria-label="The Song of the Divine">The Song of<br><span class="text-grad">the Divine</span></h1>
+    <p class="sub">Read, listen and remember all 700 slokas of the Bhagavad Gita in nine scripts — now with motion that breathes with every verse.</p>
+    <div class="ctas">
+      <a class="btn primary magnetic" href="#chapters"><span class="msi">auto_stories</span>Begin reading</a>
+      <a class="btn magnetic" href="#test"><span class="msi">psychology</span>Sloka Test</a>
+    </div>
+    <div class="verse-ticker glass">
+      <span class="lbl">Gita 2.47 · cycling through scripts</span>
+      <span class="lang" id="tickerLang">TE</span>
+      <div class="txt" id="ticker"></div>
+    </div>
+    <div class="stats">
+      <div><b data-count="18">0</b><small>Chapters</small></div>
+      <div><b data-count="700">0</b><small>Slokas</small></div>
+      <div><b data-count="9">0</b><small>Scripts</small></div>
+    </div>
+  </div>
+  <div class="stage" id="stage" aria-hidden="true">
+    <div class="halo"></div>
+    <div class="ring" style="--d:28px;--s:120s"><svg viewBox="-100 -100 200 200" id="mandalaA"></svg></div>
+    <div class="ring rev" style="--d:16px;--s:80s;inset:9%"><svg viewBox="-100 -100 200 200" id="mandalaB"></svg></div>
+    <div class="orbit"><i></i></div><div class="orbit o2"><i></i></div>
+    <div class="medallion"><img src="../Krishna.webp" alt="" fetchpriority="high"></div>
+  </div>
+  <div class="scroll-cue"><i></i>Scroll</div>
+</section>
+
+<!-- ═══ 2 · LANGUAGE ═══ -->
+<section class="block" id="language" data-tour="Languages">
+  <span class="eyebrow" data-reveal>Feature 02 · Script morph</span>
+  <h2 class="title" data-reveal>One verse, <span class="text-grad">nine scripts</span></h2>
+  <p class="lead" data-reveal>The language switcher becomes a fluid pill. Choosing a script decodes every heading and chapter name in place — no page reload, no jump.</p>
+  <div class="spec" data-reveal><span>Spring pill · 550ms</span><span>Glyph scramble decode</span><span>Saved per device</span></div>
+  <div class="lang-bar glass" id="langBar" role="tablist" aria-label="Script" data-reveal><span class="pill"></span></div>
+  <div class="scramble-demo">
+    <div class="glass" data-reveal><small>Chapter 2</small><div class="v" id="lsName"></div></div>
+    <div class="glass" data-reveal><small>Label</small><div class="v" id="lsLabel"></div></div>
+    <div class="glass" data-reveal><small>Practice</small><div class="v" id="lsTest"></div></div>
+  </div>
+</section>
+
+<!-- ═══ 3 · CHAKRA NAVIGATOR ═══ -->
+<section class="block" id="chapters" data-tour="Chapter Chakra">
+  <span class="eyebrow" data-reveal>Feature 03 · Sudarshana chapter wheel</span>
+  <h2 class="title" data-reveal>Turn the <span class="text-grad">wheel of wisdom</span></h2>
+  <p class="lead" data-reveal>Drag, scroll or use ← → to spin all 18 chapters. The wheel snaps with momentum, and the hub reveals the chapter, its sloka count and your reading progress. Prefer a list? Switch to the 3D tilt grid.</p>
+  <div class="view-switch glass" id="viewSwitch" data-reveal>
+    <span class="pill"></span>
+    <button class="on" data-view="wheel"><span class="msi">donut_large</span>Wheel</button>
+    <button data-view="grid"><span class="msi">grid_view</span>Grid</button>
+  </div>
+  <div id="wheelView" class="chakra-wrap">
+    <div>
+      <div class="chakra" id="chakra" tabindex="0" role="listbox" aria-label="Chapters wheel. Use arrow keys to turn.">
+        <div class="rim"></div>
+        <div class="rotor" id="rotor"><svg class="spokes" viewBox="-100 -100 200 200" id="spokes"></svg></div>
+        <div class="pointer"></div>
+        <div class="hub" id="hub"><div><div class="num text-grad" id="hubNum">1</div><div class="nm" id="hubName"></div><div class="cnt" id="hubCnt"></div></div></div>
+      </div>
+      <p class="hint"><span class="msi">swipe</span>Drag or tap the wheel · then scroll or use arrow keys</p>
+    </div>
+    <article class="chapter-card glass" data-reveal="right">
+      <span class="eyebrow" id="ccEyebrow">Chapter 1</span>
+      <h3 id="ccName"></h3>
+      <div class="meta"><div><b id="ccCount">47</b>Slokas</div><div><b id="ccRead">0%</b>Read</div><div><b id="ccMins">~6</b>Minutes</div></div>
+      <div class="first" id="ccFirst"></div>
+      <a class="btn primary magnetic" href="#reader" id="ccOpen"><span class="msi">menu_book</span>Open chapter</a>
+    </article>
+  </div>
+  <div id="gridView" class="grid-view" hidden></div>
+</section>
+
+<!-- ═══ 4 · READER ═══ -->
+<section class="block" id="reader" data-tour="Verse Reader">
+  <span class="eyebrow" data-reveal>Feature 04 · Living verse reader</span>
+  <h2 class="title" data-reveal>Every word <span class="text-grad">lights up</span></h2>
+  <p class="lead" data-reveal>Tap ▶ and the verse is read aloud while each word glows in time with the recitation, a waveform dances beside it and a light ring circles the card. <b>Meaning</b> unrolls like a palm-leaf manuscript. <b>Double-click</b> any sloka to open the range player.</p>
+  <div class="spec" data-reveal><span>Word-sync highlight</span><span>Live audio waveform</span><span>Palm-leaf unroll · 800ms</span><span>Staggered scroll reveal</span></div>
+  <div class="reader-head glass" id="readerHead">
+    <span class="chip" id="rhChip">Ch 1</span>
+    <h3 id="rhTitle"></h3>
+    <button class="btn sm magnetic" id="playAllBtn"><span class="msi">playlist_play</span>Play range</button>
+    <div class="rp"><i id="rhProg"></i></div>
+  </div>
+  <div class="slokas" id="slokas"></div>
+  <div style="text-align:center;margin-top:24px"><button class="btn magnetic" id="moreBtn"><span class="msi">expand_more</span>Show more slokas</button></div>
+</section>
+
+<!-- ═══ 6 · RANGE PLAYER (feature list position: shown by the reader) ═══ -->
+<section class="block" id="rangeInfo" data-tour="Range Player">
+  <span class="eyebrow" data-reveal>Feature 05 · Dynamic island & range player</span>
+  <h2 class="title" data-reveal>Practice <span class="text-grad">on repeat</span></h2>
+  <p class="lead" data-reveal>Playback lives in a floating island that morphs from a tiny pill into a full transport bar. The range sheet springs up from the bottom and previews your repetition pattern as glowing beads — 1·1·2·2 or 1·2·3·1·2·3 — before you press play.</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap" data-reveal>
+    <button class="btn primary magnetic" id="openSheetBtn"><span class="msi">tune</span>Open range player</button>
+    <button class="btn magnetic" id="demoIslandBtn"><span class="msi">graphic_eq</span>Play sloka 2.47</button>
+  </div>
+</section>
+
+<!-- ═══ 7 · SLOKA TEST ═══ -->
+<section class="block" id="test" data-tour="Sloka Test">
+  <span class="eyebrow" data-reveal>Feature 06 · Gamified Sloka Test</span>
+  <h2 class="title" data-reveal>Recall, reveal, <span class="text-grad">rejoice</span></h2>
+  <p class="lead" data-reveal>Pick a level and the question card flips in with the hidden stanza veiled in shimmering gold. Reveal it to dissolve the veil and release a shower of lotus petals. A streak ring tracks your session.</p>
+  <div class="test-grid">
+    <div data-reveal="left">
+      <div class="levels" id="levels"></div>
+      <span class="field-l">Chapter</span>
+      <div class="seg two glass" id="testScope"><span class="pill"></span><button class="on" data-scope="current">Selected chapter</button><button data-scope="any">Any chapter</button></div>
+      <button class="btn primary magnetic" id="genBtn" style="margin-top:18px;width:100%;justify-content:center"><span class="msi">auto_awesome</span>Generate question</button>
+    </div>
+    <div class="flip-scene" data-reveal="right">
+      <div class="flip" id="flip">
+        <div class="face front glass">
+          <div class="big text-grad">ॐ</div>
+          <p style="color:var(--muted);max-width:320px">Choose a level and press <b>Generate</b>. The card turns to reveal your question.</p>
+        </div>
+        <div class="face back glass">
+          <div class="q-meta">
+            <span class="chip" id="qLevel">Beginner</span><span class="chip" id="qChap">Chapter 2</span>
+            <span class="streak"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" stroke="var(--line)"/><circle id="streakRing" cx="20" cy="20" r="16" stroke="var(--peacock)" stroke-linecap="round" stroke-dasharray="100.5" stroke-dashoffset="100.5" style="transition:stroke-dashoffset .8s var(--ease-spring)"/></svg><span id="streakTxt">0 / 5</span></span>
+          </div>
+          <div class="stanza-l" id="s1l">Shown</div>
+          <div class="stanza" id="s1"></div>
+          <div class="stanza-l" id="s2l">Recall this part</div>
+          <div class="veil" id="veil"><div class="stanza hidden-text" id="s2" style="margin-top:0"></div></div>
+          <div class="acts">
+            <button class="btn primary magnetic" id="revealBtn"><span class="msi">visibility</span>Reveal</button>
+            <button class="btn magnetic" id="nextQBtn"><span class="msi">arrow_forward</span>Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 8 · DHYANA & MAHATYAM ═══ -->
+<section class="block" id="dhyana" data-tour="Dhyana Carousel">
+  <span class="eyebrow" data-reveal>Feature 07 · Dhyana & Mahatyam carousel</span>
+  <h2 class="title" data-reveal>Before you begin, <span class="text-grad">meditate</span></h2>
+  <p class="lead" data-reveal>Dhyana slokas and the Gita Mahatyam become a cinematic, swipeable deck. Cards scale and turn as they reach the centre; drag with a mouse or swipe on touch.</p>
+  <div class="seg two glass" id="dhyanaSwitch" style="max-width:360px;margin-bottom:10px" data-reveal><span class="pill"></span><button class="on" data-k="dyana" id="dsDyana">Dhyana</button><button data-k="mahatyam" id="dsMaha">Mahatyam</button></div>
+</section>
+<div class="carousel" id="carousel" aria-label="Dhyana slokas"></div>
+<div class="dots" id="cDots"></div>
+
+<!-- ═══ 9 · VERSE OF THE DAY ═══ -->
+<section class="block" id="votd" data-tour="Verse of the Day">
+  <span class="eyebrow" data-reveal>Feature 08 · Verse of the day</span>
+  <h2 class="title" data-reveal>A verse <span class="text-grad">for today</span></h2>
+  <div class="votd" data-reveal="zoom">
+    <div class="in">
+      <div class="date"><b id="vdDay">19</b><span id="vdMon">Nov</span></div>
+      <div>
+        <span class="chip" id="vdRef">Gita 2.47</span>
+        <div class="v" id="vdText" style="margin-top:14px"></div>
+        <div class="m" id="vdMeaning"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn primary magnetic" id="vdPlay"><span class="msi">play_arrow</span>Listen</button>
+          <button class="btn magnetic" id="vdCopy"><span class="msi">content_copy</span>Copy verse</button>
+          <button class="btn magnetic" id="vdShuffle"><span class="msi">shuffle</span>Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 10 · LINEAGE (About + Inspiration) ═══ -->
+<section class="block" id="lineage" data-tour="About & Inspiration">
+  <span class="eyebrow" data-reveal>Feature 09 · Lineage timeline</span>
+  <h2 class="title" data-reveal>The hands that <span class="text-grad">carried the Gita</span></h2>
+  <p class="lead" data-reveal>About Us and Inspiration merge into one story. A golden thread draws itself as you scroll, lighting each person's knot as you reach them.</p>
+  <div class="timeline" id="timeline">
+    <svg class="line" preserveAspectRatio="none"><path class="bg" d="M2 0 V 10000"/><path id="tlPath" d="M2 0 V 10000"/></svg>
+  </div>
+</section>
+
+<!-- ═══ 11 · APP CTA ═══ -->
+<section class="block" id="app" data-tour="App Download">
+  <div class="app-cta glass" data-reveal="zoom">
+    <div>
+      <span class="eyebrow">Feature 10 · Pocket Gita</span>
+      <h2 class="title">Carry the Gita <span class="text-grad">everywhere</span></h2>
+      <p class="lead" style="margin-bottom:26px">The Android app gets the same motion system: the phone tilts toward your cursor and its screens cascade in.</p>
+      <a class="btn primary magnetic" href="https://github.com/kolluruharshavardhanhindu-cyber/BhagavadGita/raw/refs/heads/main/BhagavadGita.apk?raw=true" download="BhagavadGita.apk"><span class="msi">android</span>Download the app</a>
+    </div>
+    <div class="phone" id="phone">
+      <div class="scr">
+        <div class="pm"><img src="../Krishna.webp" alt=""></div>
+        <div class="rowp" style="--i:0"><b>01</b>Arjuna Vishada Yogam</div>
+        <div class="rowp" style="--i:1"><b>02</b>Samkhya Yogam</div>
+        <div class="rowp" style="--i:2"><b>03</b>Karma Yogam</div>
+        <div class="rowp" style="--i:3"><b>04</b>Jyana Yogam</div>
+        <div class="rowp" style="--i:4"><b>05</b>Karma Sanyasa Yogam</div>
+        <div class="rowp" style="--i:5"><b>06</b>Atma Samyama Yogam</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 12 · MOTION SYSTEM ═══ -->
+<section class="block" id="system" data-tour="Motion System">
+  <span class="eyebrow" data-reveal>Design system · hand-off</span>
+  <h2 class="title" data-reveal>Motion <span class="text-grad">tokens</span></h2>
+  <p class="lead" data-reveal>Four curves drive every animation on the site. Hover a card to watch its curve. Everything respects <i>prefers-reduced-motion</i>, and the ◎ button in the top bar pauses ambient motion.</p>
+  <div class="tokens" id="tokens"></div>
+  <div class="swatches" id="swatches" data-reveal></div>
+</section>
+</main>
+
+<footer>
+  <svg class="lotus" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M32 38C22 30 22 14 32 4c10 10 10 26 0 34Z"/><path d="M32 38C20 36 10 26 8 14c12 0 22 10 24 24Z"/><path d="M32 38c12-2 22-12 24-24-12 0-22 10-24 24Z"/><path d="M4 38h56"/></svg>
+  Redesign mockup · Bhagavad Gita · ధర్మమే మార్గం<br>Uses the live sloka data, meanings and recitation audio from this project.
+</footer>
+
+<!-- ═══ floating dynamic island ═══ -->
+<div class="island" id="island" aria-live="polite">
+  <div class="art"><img src="../Krishna.webp" alt=""></div>
+  <div class="mini-viz" id="islandViz"></div>
+  <div class="meta"><b id="islandTitle">Sloka 1</b><small id="islandSub">Chapter 1</small></div>
+  <div class="ctrl">
+    <button class="side" id="isPrev" aria-label="Previous"><span class="msi">skip_previous</span></button>
+    <button class="main" id="isPlay" aria-label="Pause"><span class="msi fill">pause</span></button>
+    <button class="side" id="isNext" aria-label="Next"><span class="msi">skip_next</span></button>
+    <button class="side" id="isClose" aria-label="Stop"><span class="msi">close</span></button>
+  </div>
+  <div class="prog"><i id="islandProg"></i></div>
+</div>
+
+<!-- ═══ range sheet ═══ -->
+<div class="sheet-back" id="sheetBack"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="grab"></div>
+  <h3 id="sheetTitle">Range player</h3>
+  <p style="margin:0;color:var(--muted);font-size:14px" id="sheetSub">Chapter 1</p>
+  <div class="row">
+    <div class="stepper"><label>From</label><div class="ctl"><button data-step="from:-1" aria-label="Decrease from"><span class="msi">remove</span></button><output id="rFrom">1</output><button data-step="from:1" aria-label="Increase from"><span class="msi">add</span></button></div></div>
+    <div class="stepper"><label>To</label><div class="ctl"><button data-step="to:-1" aria-label="Decrease to"><span class="msi">remove</span></button><output id="rTo">5</output><button data-step="to:1" aria-label="Increase to"><span class="msi">add</span></button></div></div>
+  </div>
+  <span class="field-l">Iterations · <b id="rItTxt">2</b></span>
+  <input type="range" class="slider" id="rIt" min="1" max="20" value="2">
+  <span class="field-l">Speed</span>
+  <div class="seg" id="rSpeed"><span class="pill"></span><button data-v="0.75">0.75×</button><button class="on" data-v="1">1×</button><button data-v="1.25">1.25×</button><button data-v="1.5">1.5×</button></div>
+  <span class="field-l">Pattern</span>
+  <div class="seg two" id="rPattern"><span class="pill"></span><button class="on" data-v="A">Repeat each · 1,1,2,2</button><button data-v="B">Repeat sequence · 1,2,1,2</button></div>
+  <span class="field-l">Preview</span>
+  <div class="beads" id="beads"></div>
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary magnetic" id="rStart" style="flex:1;justify-content:center"><span class="msi fill">play_arrow</span>Start</button>
+    <button class="btn" id="rClose">Close</button>
+  </div>
+</div>
+
+<!-- real project data -->
+<script src="../gita-data.js"></script>
+<script src="mockup.js"></script>
+</body>
+</html>
