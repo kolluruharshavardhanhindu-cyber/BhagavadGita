@@ -839,3 +839,51 @@ main#main{display:block}
 .c-wa{background:#25D366;color:#fff;border-color:transparent}
 .c-wa:hover{box-shadow:0 0 0 1px rgba(37,211,102,.4),0 10px 30px -8px rgba(37,211,102,.7)}
 .g-contact a.g-wa{color:#1da851;border-color:rgba(37,211,102,.5)}
+
+/* About / Inspiration language picker */
+.page-lang{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:6px 8px 6px 14px;border-radius:999px;border:1px solid var(--line-2);background:var(--glass-2);backdrop-filter:blur(10px)}
+.page-lang .material-symbols-outlined{font-size:20px;color:var(--saffron)}
+.page-lang select{border:0;background:transparent;font-weight:800;font-size:14px;padding:6px 4px;cursor:pointer;color:var(--ink)}
+.page-lang select:focus{outline:none}
+.page-lang option{background:var(--bg);color:var(--ink)}
+.d-lang-swap .tl-card,.d-lang-swap .insp-item,.d-lang-swap .page-head h1,.d-lang-swap .page-head p,.d-lang-swap .note{animation:langSwap .6s var(--ease-out)}
+@keyframes langSwap{from{opacity:0;filter:blur(6px);transform:translateY(8px)}}
+
+/* Sloka Test: the selected level's description (shown on phones only) */
+.level-desc{display:none}
+
+/* ── Sloka Test on phones: compact setup, far less scrolling ── */
+@media (max-width:640px){
+  .gt-page .page{padding-top:84px}
+  .gt-page .page-head{margin-bottom:16px}
+  .gt-page .page-head h1{font-size:32px;margin:6px 0}
+  .gt-page .page-head p{font-size:14px}
+  .gt-page .page-head .eyebrow{display:none}
+  #testEmpty{display:none!important}
+  .test-setup{padding:14px;border-radius:22px}
+  .setup-step{margin-bottom:14px}
+  .setup-step legend,.setup-step .field-label{margin-bottom:8px}
+  .test-setup .radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .radio-card-body{padding:10px 10px 10px 36px;min-height:46px;display:flex;align-items:center;border-radius:14px}
+  .radio-card-body::before{left:11px;width:16px;height:16px;margin-top:-8px}
+  .radio-card input:checked+.radio-card-body::before{border-width:5px}
+  .radio-card input:checked+.radio-card-body{transform:none}
+  .radio-title{font-size:13.5px}
+  .radio-desc{display:none}
+  .identify-card{grid-column:auto}
+  .identify-card:has(input[value="identify"]:checked){grid-column:1/-1}
+  .identify-card .radio-card-body{border-radius:14px}
+  .identify-card:has(input[value="identify"]:checked) .radio-card-body{border-bottom-left-radius:0;border-bottom-right-radius:0}
+  .identify-modes{display:none}
+  .identify-card:has(input[value="identify"]:checked) .identify-modes{display:grid;grid-template-columns:1fr 1fr;padding:8px;gap:6px}
+  .mode-chip>span{padding:8px 10px}
+  .mode-chip small{display:none}
+  .level-desc{display:block;margin:10px 2px 0;font-size:12.5px;color:var(--muted);line-height:1.45;min-height:1.45em}
+  .helper-text{margin-top:6px;font-size:12px}
+  .setup-actions .btn-lg{padding:13px 20px}
+}
+@media (max-width:640px){
+  /* Supreme / Identify pick the chapter themselves: hide the disabled dropdown, keep its one-line note */
+  .test-setup:has(input[value="identify"]:checked) #chapterSelect,
+  .test-setup:has(input[value="supreme"]:checked) #chapterSelect{display:none}
+}

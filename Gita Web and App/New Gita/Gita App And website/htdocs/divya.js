@@ -256,12 +256,7 @@ function initHome(){
     for(k = 0; k < 16; k++) s += '<path d="M0 -70 C 6 -60, 6 -52, 0 -46 C -6 -52, -6 -60, 0 -70 Z" transform="rotate(' + k * 22.5 + ')" fill="currentColor" opacity=".18"/>';
     mB.innerHTML = s;
   }
-  var stage = $('#stage');
-  if(stage && !RM){
-    var tx = 0, ty = 0, sx = 0, sy = 0;
-    addEventListener('pointermove', function(e){ tx = e.clientX / innerWidth * 2 - 1; ty = e.clientY / innerHeight * 2 - 1; }, { passive: true });
-    (function tick(){ if(!home.classList.contains('hidden')){ sx = lerp(sx, tx, .06); sy = lerp(sy, ty, .06); stage.style.setProperty('--mx', sx.toFixed(3)); stage.style.setProperty('--my', sy.toFixed(3)); } requestAnimationFrame(tick); })();
-  }
+  /* the hero picture and its mandalas stay put: no pointer parallax (they only rotate in place) */
   /* Gita 2.47 decoding through every script */
   var LD = G('languageData') || {}, order = ['te', 'hi', 'en', 'ta', 'kn', 'ml', 'gu', 'bn', 'or'].filter(function(l){ return LD[l] && LD[l][2] && LD[l][2].slokas[46]; });
   var NAMES = { te:'Telugu', hi:'Devanagari', en:'English', ta:'Tamil', kn:'Kannada', ml:'Malayalam', gu:'Gujarati', bn:'Bengali', or:'Odia' };
@@ -763,6 +758,62 @@ function initTimeline(){
   addEventListener('scroll', function(){ requestAnimationFrame(draw); }, { passive: true }); addEventListener('resize', draw); setTimeout(draw, 100); draw();
 }
 
+/* ════════ ABOUT / INSPIRATION in the chosen language ════════ */
+function initPageI18n(){
+  var mainEl = $('[data-i18n-page]'), T = window.GITA_PAGE_I18N;
+  if(!mainEl || !T) return;
+  var page = mainEl.getAttribute('data-i18n-page');
+  var EYEBROW = { About: { en: 'About' }, Inspiration: { en: 'Inspiration' } };
+  function pick(key, l){
+    var parts = key.split('.'), group = T[parts[0]] || {}, entry = group[parts[1]];
+    var common = T.common[parts[1]];
+    return (entry && entry[l]) || (common && common[l]) || (entry && entry.te) || (common && common.te) || null;
+  }
+  function rich(s){ return esc(s).replace(/&lt;hl&gt;/g, '<span class="highlight">').replace(/&lt;\/hl&gt;/g, '</span>'); }
+  function apply(l){
+    if(['te', 'en', 'hi', 'ta', 'kn', 'ml', 'gu', 'bn', 'or'].indexOf(l) < 0) l = 'te';
+    root.setAttribute('lang', { te:'te', en:'en', hi:'hi', ta:'ta', kn:'kn', ml:'ml', gu:'gu', bn:'bn', or:'or' }[l]);
+    $$('[data-i18n]').forEach(function(el){
+      var v = pick(el.getAttribute('data-i18n'), l); if(v == null) return;
+      if(v.indexOf('<hl>') >= 0) el.innerHTML = rich(v); else el.textContent = v;
+    });
+    $$('[data-i18n-tpl]').forEach(function(el){
+      var v = pick(el.getAttribute('data-i18n-tpl'), l), a = el.querySelector('a'); if(v == null || !a) return;
+      var href = a.getAttribute('href');
+      el.innerHTML = esc(v).replace('{a}', '<a href="' + esc(href) + '" target="_blank" rel="noopener">').replace('{/a}', '</a>');
+    });
+    $$('[data-i18n-eyebrow]').forEach(function(el){
+      var en = el.getAttribute('data-i18n-eyebrow'), title = pick(page + '.title', l);
+      el.textContent = l === 'en' ? en : en + ' · ' + title;
+    });
+    var nm = pick(page + '.title', l); if(nm) document.title = nm + ' – Bhagavad Gita';
+    var sel = $('#pageLang'); if(sel) sel.value = l;
+  }
+  var cur = 'te'; try { cur = localStorage.getItem('gitaLang') || 'te'; } catch(e){}
+  apply(cur);
+  var sel = $('#pageLang');
+  if(sel) sel.addEventListener('change', function(){
+    try { localStorage.setItem('gitaLang', sel.value); } catch(e){}
+    var main = $('main'); if(main && !RM){ main.classList.remove('d-lang-swap'); void main.offsetWidth; main.classList.add('d-lang-swap'); }
+    apply(sel.value);
+  });
+}
+
+/* Sloka Test on phones: one line describing the selected level (cards hide their descriptions) */
+function initLevelDesc(){
+  var grid = $('.radio-grid'); if(!grid || $('#levelDesc')) return;
+  var p = document.createElement('p'); p.id = 'levelDesc'; p.className = 'level-desc'; p.setAttribute('aria-live', 'polite');
+  grid.parentNode.appendChild(p);
+  function upd(){
+    var c = $('input[name="difficulty"]:checked'), d = null;
+    if(c && c.value === 'identify'){ var m = $('input[name="identifyMode"]:checked'); d = m && m.closest('.mode-chip').querySelector('small'); }
+    else d = c && c.closest('.radio-card').querySelector('.radio-desc');
+    p.textContent = d ? d.textContent : 'Choose a level';
+  }
+  document.addEventListener('change', function(e){ if(e.target && (e.target.name === 'difficulty' || e.target.name === 'identifyMode')) upd(); });
+  upd();
+}
+
 /* ════════ boot ════════ */
 function boot(){
   ambient(); Cosmos.init(); header(); watchReveal(document);
@@ -770,6 +821,8 @@ function boot(){
   try { initReader(); hookPlayer(); initRange(); } catch(e){ console.error('divya reader', e); }
   try { initTest(); } catch(e){ console.error('divya test', e); }
   try { initTimeline(); } catch(e){ console.error('divya timeline', e); }
+  try { initPageI18n(); } catch(e){ console.error('divya i18n', e); }
+  try { initLevelDesc(); } catch(e){ console.error('divya levels', e); }
 }
 /* glass.js (also deferred, earlier) builds the header on DOMContentLoaded; run after it */
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 0); });
