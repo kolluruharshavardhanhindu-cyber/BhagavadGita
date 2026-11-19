@@ -1,6 +1,10 @@
 /* ─────────────────────────────────────────────────────────────
    GitaTest.js
-   Bhagavad Gita Sloka Test — Beginner / Easy / Intermediate / Advanced
+   Bhagavad Gita Sloka Test — Beginner / Easy / Intermediate / Advanced /
+   Supreme / Identify
+   Identify level has two directions, chosen on its card:
+     • guess  : the whole sloka is shown, you name its chapter + sloka number
+     • recall : the chapter + sloka number are shown, you recall the sloka
 
    Reuses the sloka data already loaded by gita-data.js + app.js:
      - gitaData        : Telugu (default) chapters { name, slokas[] }
@@ -140,9 +144,15 @@
 
   function updateChapterSelectState() {
     const difficulty = getSelectedDifficulty();
-    const isSupreme = difficulty === "supreme";
-    chapterSelect.disabled = isSupreme;
-    if (chapterHelperText) chapterHelperText.classList.toggle("hidden", !isSupreme);
+    const isRandom = difficulty === "supreme" || difficulty === "identify";
+    chapterSelect.disabled = isRandom;
+    if (chapterHelperText) {
+      chapterHelperText.classList.toggle("hidden", !isRandom);
+      const t = chapterHelperText.querySelector("span:last-child");
+      if (t) t.textContent = difficulty === "identify"
+        ? "Identify level picks a random sloka from all 18 chapters — chapter selection is disabled."
+        : "Supreme level picks a random chapter automatically — chapter selection is disabled.";
+    }
   }
 
   /* ─── DOM ─── */
@@ -168,6 +178,13 @@
   let currentChapterNum = null;
   let currentChapterName = "";
   let currentSlokaNumber = null;
+  let identifyMode = null;   // "guess" | "recall" (Identify level only)
+
+  /* "Chapter 2: Sankhya Yogam · Sloka 47" (or the Dhyana / Mahatyam label) */
+  function fullReference() {
+    const base = isSpecialView(currentChapterNum) ? getSpecialLabel(currentChapterNum) : "Chapter " + currentChapterNum;
+    return base + (currentChapterName ? ": " + currentChapterName : "") + " · Sloka " + currentSlokaNumber;
+  }
 
   function getSelectedDifficulty() {
     const checked = difficultyInputs().find(i => i.checked);
@@ -204,6 +221,20 @@
   function renderQuestion(difficulty, model) {
     let firstStanzaHtml = "";
     let secondStanzaHtml = "";
+
+    if (difficulty === "identify") {
+      if (identifyMode === "guess") {
+        firstStanzaHeading.classList.add("hidden");
+        secondStanzaHeading.classList.add("hidden");
+        secondStanzaBox.classList.add("hidden");
+        firstStanzaBox.innerHTML = visibleLine("Which chapter and sloka is this?", model.originalSloka.replace(/\n/g, "<br>"));
+        secondStanzaBox.innerHTML = "";
+      } else {
+        firstStanzaBox.innerHTML = hiddenPlaceholder("First Stanza");
+        secondStanzaBox.innerHTML = hiddenPlaceholder("Second Stanza");
+      }
+      return;
+    }
 
     if (difficulty === "beginner") {
       firstStanzaHtml = visibleLine("First Stanza", model.firstStanza);
@@ -252,8 +283,7 @@
     // Supreme level keeps the chapter/sloka number hidden until View is
     // clicked — reveal it now, alongside the full sloka text.
     if (currentDifficulty === "supreme") {
-      chapterLabel.textContent =
-        `${isSpecialView(currentChapterNum) ? getSpecialLabel(currentChapterNum) : "Chapter " + currentChapterNum}${currentChapterName ? ": " + currentChapterName : ""} · Sloka ${currentSlokaNumber}`;
+      chapterLabel.textContent = fullReference();
     }
 
     fullSlokaBox.innerHTML = `<div class="gt-sloka-text">${model.originalSloka.replace(/\n/g, "<br>")}</div>`;
@@ -327,7 +357,7 @@
     const langData = (typeof getLangData === "function") ? getLangData() : gitaData;
 
     let chapterNum;
-    if (difficulty === "supreme") {
+    if (difficulty === "supreme" || difficulty === "identify") {
       chapterNum = pickRandomChapterNum(langData || gitaData);
       if (!chapterNum) {
         showError("No sloka data available to generate a Supreme question.");
@@ -363,9 +393,14 @@
     const names = (typeof chapterNames !== "undefined" && (chapterNames[currentLang] || chapterNames.te)) || [];
     currentChapterName = isDyana ? "" : (names[chapterNum - 1] || chapterData.name || "");
 
-    difficultyLabel.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-    // Supreme level keeps the chapter/sloka number a secret until View is clicked.
-    chapterLabel.textContent = (difficulty === "supreme") ? "Chapter: ???" : (isDyana ? getSpecialLabel(chapterNum) : `Chapter ${chapterNum}`);
+    const modeInput = document.querySelector('input[name="identifyMode"]:checked');
+    identifyMode = difficulty === "identify" ? ((modeInput && modeInput.value) || "guess") : null;
+    difficultyLabel.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1) +
+      (identifyMode ? (identifyMode === "guess" ? " · Name the number" : " · Recall the sloka") : "");
+    // Supreme keeps chapter + sloka number secret until View; Identify-guess asks for them;
+    // every other level shows them at the top right away.
+    chapterLabel.textContent = (difficulty === "supreme") ? "Chapter: ???"
+      : (identifyMode === "guess" ? "Chapter ? · Sloka ?" : fullReference());
 
     // Reset from any previous "revealed" state back to the split stanza view
     firstStanzaHeading.classList.remove("hidden");
@@ -380,7 +415,14 @@
     resultSection.classList.remove("hidden");
     viewBtn.classList.remove("hidden");
     viewBtn.disabled = false;
-    setViewLabel("View");
+    setViewLabel(identifyMode === "guess" ? "Show answer" : "View");
+    const gb = $("guessBox");
+    if (gb) {
+      gb.classList.toggle("hidden", identifyMode !== "guess");
+      $("guessChapter").value = ""; $("guessSloka").value = "";
+      $("guessResult").className = "guess-result hidden"; $("guessResult").textContent = "";
+      $("checkBtn").disabled = false;
+    }
 
     /* session bookkeeping + fresh question state */
     stats.asked++;
@@ -395,22 +437,62 @@
     if (window.innerWidth < 900) resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function onView() {
-    if (!currentModel || revealed) return;
-    renderFull(currentModel);
+  /* correct: true / false (Identify-guess) or null (plain reveal) */
+  function finishReveal(correct, from) {
     revealed = true;
     viewBtn.disabled = true;
     setViewLabel("Revealed");
     stats.revealed++;
     $("nextBtn").classList.remove("hidden");
+    document.dispatchEvent(new CustomEvent("gitatest:reveal", { detail: { correct: correct, from: from } }));
+  }
+
+  function onView() {
+    if (!currentModel || revealed) return;
+    if (identifyMode === "guess") { showAnswer(null); return; }
+    renderFull(currentModel);
+    finishReveal(null, viewBtn);
+  }
+
+  function showGuess(msg, kind) {
+    const r = $("guessResult");
+    r.textContent = msg;
+    r.className = "guess-result is-" + kind;
+  }
+
+  function onCheck() {
+    if (!currentModel || revealed || identifyMode !== "guess") return;
+    const c = parseInt($("guessChapter").value, 10), n = parseInt($("guessSloka").value, 10);
+    if (!c || !n) { showGuess("Enter both the chapter and the sloka number.", "warn"); return; }
+    showAnswer({ c: c, n: n });
+  }
+
+  function showAnswer(guess) {
+    chapterLabel.textContent = fullReference();
+    $("checkBtn").disabled = true;
+    let correct = false;
+    if (!guess) showGuess("Answer: " + fullReference(), "info");
+    else if (guess.c === currentChapterNum && guess.n === currentSlokaNumber) { showGuess("Correct! Chapter " + currentChapterNum + ", Sloka " + currentSlokaNumber + ".", "ok"); correct = true; }
+    else if (guess.c === currentChapterNum) showGuess("Right chapter! It is sloka " + currentSlokaNumber + ".", "near");
+    else showGuess("Not quite — it is Chapter " + currentChapterNum + ", Sloka " + currentSlokaNumber + ".", "no");
+    finishReveal(correct, guess ? $("checkBtn") : viewBtn);
   }
 
   function init() {
     populateChapterDropdown();
     difficultyInputs().forEach(input => input.addEventListener("change", updateChapterSelectState));
+    /* picking an Identify mode also selects the Identify level */
+    document.querySelectorAll('input[name="identifyMode"]').forEach(m => m.addEventListener("change", () => {
+      const lvl = document.querySelector('input[name="difficulty"][value="identify"]');
+      if (lvl && !lvl.checked) { lvl.checked = true; updateChapterSelectState(); }
+    }));
     updateChapterSelectState();
     generateBtn.addEventListener("click", onGenerate);
     viewBtn.addEventListener("click", onView);
+    if ($("checkBtn")) {
+      $("checkBtn").addEventListener("click", onCheck);
+      ["guessChapter", "guessSloka"].forEach(id => $(id).addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); onCheck(); } }));
+    }
     $("nextBtn").addEventListener("click", onGenerate);
     $("finishBtn").addEventListener("click", finishSession);
     $("resetBtn").addEventListener("click", () => { resetSession(); toast("Session reset"); });
