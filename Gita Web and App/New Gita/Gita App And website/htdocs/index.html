@@ -16,11 +16,11 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
 </script>
 <link rel="icon" type="image/webp" href="Krishna.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;600;700;800&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Serif+Telugu:wght@400;600;700&family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Sans+Tamil:wght@400;600&family=Noto+Sans+Kannada:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Gujarati:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&family=Noto+Sans+Oriya:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Cinzel:wght@500;600;700&family=Manrope:wght@400;600;700;800&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Serif+Telugu:wght@400;600;700&family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Sans+Tamil:wght@400;600&family=Noto+Sans+Kannada:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Gujarati:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&family=Noto+Sans+Oriya:wght@400;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet">
-<link rel="stylesheet" href="divya.css?v=19112026a">
-<script src="glass.js?v=19112026a" defer></script>
-<script src="divya.js?v=19112026a" defer></script>
+<link rel="stylesheet" href="divya.css?v=19112026b">
+<script src="glass.js?v=19112026b" defer></script>
+<script src="divya.js?v=19112026b" defer></script>
 </head>
 
 <body data-needs-data>
@@ -71,11 +71,6 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
         <a class="d-btn primary magnetic" href="#chapters"><span class="material-symbols-outlined">auto_stories</span>Begin reading</a>
         <a class="d-btn magnetic" href="GitaTest.html"><span class="material-symbols-outlined">psychology</span>Sloka Test</a>
       </div>
-      <div class="verse-ticker glass">
-        <span class="lang" id="tickerLang">TELUGU</span>
-        <span class="lbl">Gita 2.47 · in every script</span>
-        <div class="txt" id="ticker" lang="sa"></div>
-      </div>
       <div class="hero-stats">
         <div><b data-count="18">18</b><small>Chapters</small></div>
         <div><b data-count="700">700</b><small>Slokas</small></div>
@@ -89,6 +84,25 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
       <div class="orbit"><i></i></div><div class="orbit o2"><i></i></div>
       <div class="medallion"><img src="Krishna.webp" alt="" width="270" height="270" fetchpriority="high"></div>
     </div>
+  </section>
+
+  <!-- Language -->
+  <section class="d-block lang-block" id="language" aria-labelledby="langTitle">
+    <span class="eyebrow" data-reveal>Language</span>
+    <h2 class="d-title sm" id="langTitle" data-reveal>Read in <span class="text-grad">your script</span></h2>
+    <label for="langSelect" class="sr-only">Language</label>
+    <select id="langSelect" onchange="changeLanguage(this.value)">
+      <option value="te">తెలుగు (Telugu)</option>
+      <option value="en">English (English)</option>
+      <option value="hi">देवनागरी (Devanagari)</option>
+      <option value="ta">தமிழ் (Tamil)</option>
+      <option value="kn">ಕನ್ನಡ (Kannada)</option>
+      <option value="ml">മലയാളം (Malayalam)</option>
+      <option value="gu">ગુજરાતી (Gujarati)</option>
+      <option value="bn">বাংলা (Bengali)</option>
+      <option value="or">ଓଡ଼ିଆ (Odia)</option>
+    </select>
+    <div class="lang-bar glass" id="langBar" role="tablist" aria-label="Choose script" data-reveal><span class="d-pill"></span></div>
   </section>
 
   <!-- Quick actions (Sloka Test, Dhyana, Mahatyam, App) -->
@@ -114,67 +128,13 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
     <p class="gita-app-hint">Click on <b>Gita App</b> to download the Bhagavad Gita app</p>
   </div>
 
-  <!-- Language -->
-  <section class="d-block" id="language" aria-labelledby="langTitle" style="padding-bottom:30px">
-    <span class="eyebrow" data-reveal>Language</span>
-    <h2 class="d-title" id="langTitle" data-reveal>Read in <span class="text-grad">your script</span></h2>
-    <label for="langSelect" class="sr-only">Language</label>
-    <select id="langSelect" onchange="changeLanguage(this.value)">
-      <option value="te">తెలుగు (Telugu)</option>
-      <option value="en">English (English)</option>
-      <option value="hi">देवनागरी (Devanagari)</option>
-      <option value="ta">தமிழ் (Tamil)</option>
-      <option value="kn">ಕನ್ನಡ (Kannada)</option>
-      <option value="ml">മലയാളം (Malayalam)</option>
-      <option value="gu">ગુજરાતી (Gujarati)</option>
-      <option value="bn">বাংলা (Bengali)</option>
-      <option value="or">ଓଡ଼ିଆ (Odia)</option>
-    </select>
-    <div class="lang-bar glass" id="langBar" role="tablist" aria-label="Choose script" data-reveal><span class="d-pill"></span></div>
-  </section>
-
-  <!-- Chapters: wheel or grid -->
+  <!-- Chapters -->
   <section class="d-block" id="chapters" aria-labelledby="chTitle" style="padding-top:30px">
     <span class="eyebrow" data-reveal>Chapters</span>
-    <h2 class="d-title" id="chTitle" data-reveal>Turn the <span class="text-grad">wheel of wisdom</span></h2>
-    <p class="d-lead" data-reveal>Spin the wheel to choose one of the 18 chapters — tap the highlighted chapter (or "Open chapter") to read it. The rings show how much you have read.</p>
-    <div class="d-seg glass" id="viewSwitch" role="tablist" aria-label="Chapter view" data-reveal>
-      <span class="d-pill"></span>
-      <button type="button" class="on" data-view="wheel"><span class="material-symbols-outlined">donut_large</span>Wheel</button>
-      <button type="button" data-view="grid"><span class="material-symbols-outlined">grid_view</span>Grid</button>
-    </div>
-    <div id="wheelView" class="chakra-wrap">
-      <div>
-        <div class="chakra" id="chakra" tabindex="0" role="listbox" aria-label="Chapters wheel. Arrow keys turn it, Enter opens the chapter.">
-          <div class="rim"></div>
-          <div class="rotor" id="rotor"><svg class="spokes" viewBox="-100 -100 200 200" id="spokes" aria-hidden="true"></svg></div>
-          <div class="hub" id="hub"><div><div class="num text-grad" id="hubNum">1</div><div class="nm" id="hubName"></div><div class="cnt" id="hubCnt"></div></div></div>
-        </div>
-        <p class="d-hint"><span class="material-symbols-outlined" aria-hidden="true">swipe</span>Drag sideways to spin · tap a number · arrow keys</p>
-      </div>
-      <article class="chapter-card glass" data-reveal>
-        <span class="eyebrow" id="ccEyebrow">Chapter 1</span>
-        <h3 id="ccName"></h3>
-        <div class="meta"><div><b id="ccCount">47</b>Slokas</div><div><b id="ccRead">0%</b>Read</div><div><b id="ccMins">~11</b>Minutes</div></div>
-        <div class="first" id="ccFirst"></div>
-        <a class="d-btn primary magnetic" href="#chapter-1" id="ccOpen"><span class="material-symbols-outlined">menu_book</span>Open chapter</a>
-      </article>
-    </div>
-    <div id="chapterGrid" class="hidden"></div>
+    <h2 class="d-title" id="chTitle" data-reveal>The <span class="text-grad">18 chapters</span></h2>
+    <p class="d-lead" data-reveal>Choose a chapter to read and listen. The bar under each chapter shows how much of it you have read.</p>
+    <div id="chapterGrid"></div>
   </section>
-
-  <!-- Dhyana slokas & Gita Mahatyam -->
-  <section class="d-block" id="meditate" aria-labelledby="dkTitle" style="padding-bottom:10px">
-    <span class="eyebrow" data-reveal>Dhyana & Mahatyam</span>
-    <h2 class="d-title" id="dkTitle" data-reveal>Before you begin, <span class="text-grad">meditate</span></h2>
-    <div class="d-seg glass" id="deckSwitch" role="tablist" aria-label="Choose" data-reveal>
-      <span class="d-pill"></span>
-      <button type="button" class="on" data-k="dyana">Dhyana</button>
-      <button type="button" data-k="mahatyam">Mahatyam</button>
-    </div>
-  </section>
-  <div class="deck" id="deck" aria-label="Dhyana slokas and Gita Mahatyam"></div>
-  <div class="d-dots" id="deckDots" aria-hidden="true"></div>
 
   <!-- Verse of the day -->
   <section class="d-block" id="today" aria-labelledby="vdTitle">
@@ -276,6 +236,6 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
   </div>
 </div>
 
-<script src="app.js?v=19112026a"></script>
+<script src="app.js?v=19112026b"></script>
 </body>
 </html>

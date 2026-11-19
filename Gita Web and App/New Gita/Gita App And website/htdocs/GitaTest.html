@@ -16,11 +16,11 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
 </script>
 <link rel="icon" type="image/webp" href="Krishna.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;600;700;800&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Serif+Telugu:wght@400;600;700&family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Sans+Tamil:wght@400;600&family=Noto+Sans+Kannada:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Gujarati:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&family=Noto+Sans+Oriya:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Cinzel:wght@500;600;700&family=Manrope:wght@400;600;700;800&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Serif+Telugu:wght@400;600;700&family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Sans+Tamil:wght@400;600&family=Noto+Sans+Kannada:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Gujarati:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&family=Noto+Sans+Oriya:wght@400;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet">
-<link rel="stylesheet" href="divya.css?v=19112026a">
-<script src="glass.js?v=19112026a" defer></script>
-<script src="divya.js?v=19112026a" defer></script>
+<link rel="stylesheet" href="divya.css?v=19112026b">
+<script src="glass.js?v=19112026b" defer></script>
+<script src="divya.js?v=19112026b" defer></script>
 </head>
 
 <body class="gt-page" data-needs-data>
@@ -87,6 +87,10 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
           <input type="radio" name="difficulty" value="supreme">
           <span class="radio-card-body"><span class="radio-title">Supreme</span><span class="radio-desc">Random chapter. Number kept hidden.</span></span>
         </label>
+        <label class="radio-card">
+          <input type="radio" name="difficulty" value="identify">
+          <span class="radio-card-body"><span class="radio-title">Identify <span class="new-tag">New</span></span><span class="radio-desc">See the sloka → name its chapter &amp; sloka number. Or see the number → recall the sloka.</span></span>
+        </label>
         </div>
       </fieldset>
 
@@ -144,6 +148,18 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
         <div id="fullSlokaBox" class="hidden"></div>
       </div>
 
+      <!-- Identify level: guess the chapter and sloka number -->
+      <div id="guessBox" class="guess-box hidden">
+        <div class="guess-fields">
+          <label class="range-field"><span class="field-label">Chapter</span>
+            <input id="guessChapter" class="input" type="number" min="1" max="18" inputmode="numeric" placeholder="1–18"></label>
+          <label class="range-field"><span class="field-label">Sloka</span>
+            <input id="guessSloka" class="input" type="number" min="1" max="78" inputmode="numeric" placeholder="No."></label>
+          <button id="checkBtn" type="button" class="btn btn-primary magnetic"><span class="material-symbols-outlined" aria-hidden="true">task_alt</span>Check</button>
+        </div>
+        <p id="guessResult" class="guess-result hidden" role="status" aria-live="polite"></p>
+      </div>
+
       <div class="question-actions">
         <button id="viewBtn" type="button" class="btn btn-primary hidden magnetic">
           <span class="material-symbols-outlined" aria-hidden="true">visibility</span><span id="viewBtnLabel">View</span>
@@ -176,8 +192,8 @@ var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('co
 
 <!-- gita-data.js defines gitaData; app.js defines languageData, chapterNames, getLangData(), currentLang -->
 <script src="gita-data.js?v=03102026a"></script>
-<script src="app.js?v=19112026a"></script>
-<script src="gitatest.js?v=19112026a"></script>
+<script src="app.js?v=19112026b"></script>
+<script src="gitatest.js?v=19112026b"></script>
 
 </body>
 </html>

@@ -17,7 +17,7 @@ function G(name){ try { return (0, eval)(name); } catch(e){ return undefined; } 
 function lerp(a, b, t){ return a + (b - a) * t; }
 function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
 function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
-function buzz(ms){ try { if(navigator.vibrate) navigator.vibrate(ms); } catch(e){} }
+function buzz(ms){ try { var ua = navigator.userActivation; if(navigator.vibrate && (!ua || ua.hasBeenActive)) navigator.vibrate(ms); } catch(e){} }
 function toast(msg, type){ if(window.GitaUI && GitaUI.toast) GitaUI.toast(msg, { type: type || 'info' }); }
 function lsGet(k, d){ try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } }
 function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
@@ -283,7 +283,7 @@ function initHome(){
     var lb = $('#tickerLang'); if(lb) lb.textContent = NAMES[l].toUpperCase();
     scramble($('#ticker'), LD[l][2].slokas[46].replace(/\n\s*/g, '\n').trim(), 1000);
   }
-  ticker(); setInterval(ticker, 4800);
+  if($('#ticker')){ ticker(); setInterval(ticker, 4800); }
   /* count-up */
   $$('[data-count]').forEach(function(el){
     el._onIn = function(){ var to = +el.getAttribute('data-count'), t0 = performance.now();
@@ -323,21 +323,12 @@ function initHome(){
       var nm = names[n - 1] || (data[n] && data[n].name) || (td[n] && td[n].name) || '';
       var pct = chTotal(n) ? Math.round(readCount(n) / chTotal(n) * 100) : 0;
       html += '<a href="#chapter-' + n + '" class="card" data-ch="' + n + '" style="--i:' + n + '"><span class="n">' + (n < 10 ? '0' : '') + n + '</span>' +
+        '<span class="go" aria-hidden="true">Read<span class="material-symbols-outlined">arrow_forward</span></span>' +
         '<span><span class="nm">' + esc(nm) + '</span><span class="c">' + chTotal(n) + ' ' + esc(slokaWord()) + '</span><span class="bar"><i style="--w:' + pct + '%"></i></span></span></a>';
     }
     grid.innerHTML = html;
     grid.classList.remove('in'); void grid.offsetWidth; grid.classList.add('in');
   };
-  var grid = $('#chapterGrid');
-  if(grid){
-    grid.addEventListener('pointermove', function(e){
-      if(!FINE) return; var c = e.target.closest('.card'); if(!c) return;
-      var r = c.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-      c.style.setProperty('--ry', ((px - .5) * 16).toFixed(1) + 'deg'); c.style.setProperty('--rx', ((.5 - py) * 16).toFixed(1) + 'deg');
-      c.style.setProperty('--px', px * 100 + '%'); c.style.setProperty('--py', py * 100 + '%');
-    });
-    grid.addEventListener('pointerout', function(e){ var c = e.target.closest('.card'); if(c && !c.contains(e.relatedTarget)){ c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); } });
-  }
   seg($('#viewSwitch'), function(b){
     var g = b.dataset.view === 'grid';
     $('#wheelView').classList.toggle('hidden', g); $('#chapterGrid').classList.toggle('hidden', !g);
@@ -740,16 +731,19 @@ function initTest(){
     bar.appendChild(s);
   }
   function setStreak(n){ streak = n; var p = $('.d-streak .p'), t = $('.d-streak span'); if(p) p.style.strokeDashoffset = 100.5 * (1 - n / 5); if(t) t.textContent = n + ' / 5'; }
-  var full = $('#fullSlokaBox');
-  if(full) new MutationObserver(function(){
-    if(full.classList.contains('hidden') || full._shown){ if(full.classList.contains('hidden')) full._shown = false; return; }
-    full._shown = true;
-    var vb = $('#viewBtn'), r = vb ? vb.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
+  document.addEventListener('gitatest:reveal', function(e){
+    var d = e.detail || {}, src = d.from || $('#viewBtn');
+    var r = src ? src.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
+    if(d.correct === false){
+      setStreak(0); buzz(60);
+      var card = $('#resultSection'); if(card){ card.classList.remove('d-shake'); void card.offsetWidth; card.classList.add('d-shake'); }
+      return;
+    }
     setStreak(Math.min(5, streak + 1));
-    Petals.burst(r.left + r.width / 2, r.top + r.height / 2, streak === 5 ? 120 : 60);
+    Petals.burst(r.left + r.width / 2, r.top + r.height / 2, d.correct === true || streak === 5 ? 120 : 60);
     buzz([10, 40, 10]);
     if(streak === 5){ toast('Five in a row — shubham!', 'success'); setTimeout(function(){ setStreak(0); }, 2200); }
-  }).observe(full, { attributes: true, attributeFilter: ['class'] });
+  });
   ['resetBtn', 'newSessionBtn'].forEach(function(id){ var b = document.getElementById(id); if(b) b.addEventListener('click', function(){ setStreak(0); }); });
 }
 
