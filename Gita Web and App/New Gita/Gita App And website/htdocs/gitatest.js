@@ -2,7 +2,7 @@
    GitaTest.js
    Bhagavad Gita Sloka Test — Beginner / Easy / Intermediate / Advanced /
    Supreme / Identify
-   Identify level has two directions, picked at random per question:
+   Identify level has two directions, chosen on its card:
      • guess  : the whole sloka is shown, you name its chapter + sloka number
      • recall : the chapter + sloka number are shown, you recall the sloka
 
@@ -393,7 +393,8 @@
     const names = (typeof chapterNames !== "undefined" && (chapterNames[currentLang] || chapterNames.te)) || [];
     currentChapterName = isDyana ? "" : (names[chapterNum - 1] || chapterData.name || "");
 
-    identifyMode = difficulty === "identify" ? (Math.random() < 0.5 ? "guess" : "recall") : null;
+    const modeInput = document.querySelector('input[name="identifyMode"]:checked');
+    identifyMode = difficulty === "identify" ? ((modeInput && modeInput.value) || "guess") : null;
     difficultyLabel.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1) +
       (identifyMode ? (identifyMode === "guess" ? " · Name the number" : " · Recall the sloka") : "");
     // Supreme keeps chapter + sloka number secret until View; Identify-guess asks for them;
@@ -480,6 +481,11 @@
   function init() {
     populateChapterDropdown();
     difficultyInputs().forEach(input => input.addEventListener("change", updateChapterSelectState));
+    /* picking an Identify mode also selects the Identify level */
+    document.querySelectorAll('input[name="identifyMode"]').forEach(m => m.addEventListener("change", () => {
+      const lvl = document.querySelector('input[name="difficulty"][value="identify"]');
+      if (lvl && !lvl.checked) { lvl.checked = true; updateChapterSelectState(); }
+    }));
     updateChapterSelectState();
     generateBtn.addEventListener("click", onGenerate);
     viewBtn.addEventListener("click", onView);

@@ -101,7 +101,7 @@ var Cosmos = (function(){
     embers = []; for(var j = 0; j < Math.min(40, Math.round(W / 32)); j++) embers.push(ember(true));
   }
   function draw(){
-    if(running && !root.classList.contains('calm')){
+    if(running){
       x.clearRect(0, 0, W, H);
       var sy = scrollY * .05; x.fillStyle = col.star;
       stars.forEach(function(s){ s.p += s.s; x.globalAlpha = (col.dark ? .25 : .14) + Math.abs(Math.sin(s.p)) * (col.dark ? .65 : .32);
@@ -120,7 +120,6 @@ var Cosmos = (function(){
     requestAnimationFrame(draw);
   }
   function init(){
-    if(RM) return;
     c = document.createElement('canvas'); c.id = 'dCosmos'; c.setAttribute('aria-hidden', 'true'); document.body.insertBefore(c, document.body.firstChild);
     x = c.getContext('2d'); readColors(); size(); draw();
     addEventListener('resize', size);
@@ -160,21 +159,8 @@ var Petals = (function(){
 
 function header(){
   var h = $('.g-header'); if(!h) return;
-  /* calm (pause ambient motion) toggle */
-  var theme = $('#gTheme');
-  if(theme && !$('#dCalm')){
-    var b = document.createElement('button');
-    b.className = 'g-icon-btn'; b.id = 'dCalm'; b.type = 'button'; b.setAttribute('aria-pressed', 'false');
-    b.setAttribute('aria-label', 'Pause background animation'); b.title = 'Pause background animation';
-    b.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">motion_photos_on</span>';
-    theme.parentNode.insertBefore(b, theme);
-    if(lsGet('gitaCalm', false)){ root.classList.add('calm'); b.setAttribute('aria-pressed', 'true'); b.firstChild.textContent = 'motion_photos_paused'; }
-    b.addEventListener('click', function(){
-      var on = !root.classList.contains('calm'); root.classList.toggle('calm', on); lsSet('gitaCalm', on);
-      b.setAttribute('aria-pressed', on); b.firstChild.textContent = on ? 'motion_photos_paused' : 'motion_photos_on';
-      toast(on ? 'Background animation paused' : 'Background animation resumed');
-    });
-  }
+  /* background animation is always on (the old pause button and its saved state are gone) */
+  root.classList.remove('calm'); try { localStorage.removeItem('gitaCalm'); } catch(_){}
   /* theme: circular reveal from the button (replaces glass.js's instant switch) */
   document.addEventListener('click', function(e){
     var t = e.target.closest && e.target.closest('#gTheme'); if(!t) return;
