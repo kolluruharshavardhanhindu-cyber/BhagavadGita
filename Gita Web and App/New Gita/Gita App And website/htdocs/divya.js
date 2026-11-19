@@ -488,7 +488,6 @@ function initVotd(){
   function loadMeaning(){ var em = G('ensureMeaningData'); if(em) em().then(function(){ paint(false); }).catch(function(){}); }
   paint(false);
   var box = $('#votdBox'); box._onIn = loadMeaning; if(revealIO) revealIO.observe(box); else loadMeaning();
-  $('#vdShuffle').addEventListener('click', function(){ VOTD_CUR = flat[(Math.random() * flat.length) | 0]; paint(true); loadMeaning(); });
   $('#vdCopy').addEventListener('click', function(){
     var t = $('#vdRef').textContent + '\n\n' + text();
     var done = function(){ toast('Verse copied', 'success'); };
