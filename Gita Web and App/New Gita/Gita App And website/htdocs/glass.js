@@ -14,7 +14,7 @@
   root.classList.add('js');
   root.setAttribute('data-theme', theme);
   var metaTheme = document.querySelector('meta[name="theme-color"]');
-  function setMeta(t){ if (metaTheme) metaTheme.setAttribute('content', t === 'dark' ? '#070b1f' : '#eef2ff'); }
+  function setMeta(t){ if (metaTheme) metaTheme.setAttribute('content', t === 'dark' ? '#070514' : '#fbf3e4'); }
   setMeta(theme);
 
   /* ─── V6 ambient scene: drifting light blobs + rising particles ─── */
@@ -133,6 +133,7 @@
     /* floating glass header */
     var links = [
       ['index.html','Home','home'],
+      ['GitaTest.html','Sloka Test','quiz'],
       ['inspiration.html','Inspiration','auto_awesome'],
       ['aboutus.html','About','info'],
       ['gita-app/index.html','Gita App','apps']
@@ -190,7 +191,7 @@
         '<a href="tel:6302394175" aria-label="Call 6302394175"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>6302394175</a>'+
         '<a href="'+MAIL_HREF+'" data-mail data-to="'+CONTACT.email+'" data-subject="'+CONTACT.subject+'" aria-label="Email via Gmail"><svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#4caf50" d="M45 16.2l-5 2.75-5 4.75V40h7c1.66 0 3-1.34 3-3V16.2z"/><path fill="#1e88e5" d="M3 16.2l3.614 1.71L13 23.7V40H6c-1.66 0-3-1.34-3-3V16.2z"/><polygon fill="#e53935" points="35,11.2 24,19.45 13,11.2 12,17 13,23.7 24,31.95 35,23.7 36,17"/><path fill="#c62828" d="M3 12.298V16.2l10 7.5V11.2L9.876 8.859C9.132 8.301 8.228 8 7.298 8 4.924 8 3 9.924 3 12.298z"/><path fill="#fbc02d" d="M45 12.298V16.2l-10 7.5V11.2l3.124-2.341C38.868 8.301 39.772 8 40.702 8 43.076 8 45 9.924 45 12.298z"/></svg>Gmail</a>'+
         '</div></div>'+
-      '<nav aria-label="Footer"><a href="index.html">Chapters</a><a href="inspiration.html">Inspiration</a><a href="aboutus.html">About</a><a href="gita-app/index.html">Gita App</a></nav>'+
+      '<nav aria-label="Footer"><a href="index.html">Chapters</a><a href="GitaTest.html">Sloka Test</a><a href="inspiration.html">Inspiration</a><a href="aboutus.html">About</a><a href="gita-app/index.html">Gita App</a></nav>'+
       '<div class="g-sans">© '+new Date().getFullYear()+' Bhagavad Gita · ॐ श्रीकृष्णार्पणमस्तु</div>';
     body.appendChild(f);
 
