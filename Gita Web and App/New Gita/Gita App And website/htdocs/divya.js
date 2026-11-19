@@ -812,6 +812,19 @@ function initLevelDesc(){
   }
   document.addEventListener('change', function(e){ if(e.target && (e.target.name === 'difficulty' || e.target.name === 'identifyMode')) upd(); });
   upd();
+
+  /* phones: the Identify options sit just above Generate instead of inside the Identify card */
+  var modes = $('.identify-modes'), card = $('.identify-card'), actions = $('.setup-actions');
+  if(modes && card && actions && window.matchMedia){
+    var mq = matchMedia('(max-width: 640px)');
+    var place = function(){
+      if(mq.matches){ if(modes.nextElementSibling !== actions) actions.parentNode.insertBefore(modes, actions); modes.classList.add('is-detached'); }
+      else { if(modes.parentNode !== card) card.appendChild(modes); modes.classList.remove('is-detached'); }
+    };
+    if(mq.addEventListener) mq.addEventListener('change', place); else if(mq.addListener) mq.addListener(place);
+    addEventListener('resize', place); addEventListener('orientationchange', place);
+    place();
+  }
 }
 
 /* ════════ boot ════════ */

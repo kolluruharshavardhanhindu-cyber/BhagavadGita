@@ -887,3 +887,32 @@ main#main{display:block}
   .test-setup:has(input[value="identify"]:checked) #chapterSelect,
   .test-setup:has(input[value="supreme"]:checked) #chapterSelect{display:none}
 }
+
+/* ════════ Sloka Test level marker v2: empty ring → filled gradient tick ════════ */
+.radio-card-body::before{border:2px solid var(--line-2);background:var(--bg);transition:border-color .3s}
+.radio-card-body::after{content:"";position:absolute;left:16px;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:50%;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 12.5l4 4 8-9'/></svg>") center/13px no-repeat,var(--grad-sacred);
+  box-shadow:0 4px 12px -4px var(--saffron);transform:scale(0) rotate(-90deg);transition:transform .45s var(--ease-spring)}
+.radio-card input:checked+.radio-card-body::before{border-width:2px;border-color:transparent}
+.radio-card input:checked+.radio-card-body::after{transform:none}
+.radio-card:hover .radio-card-body::before{border-color:var(--saffron)}
+
+/* mode chips that live outside the Identify card (phones) */
+.identify-modes.is-detached{display:none}
+
+@media (max-width:640px){
+  .radio-card-body::after{left:11px;width:18px;height:18px;margin-top:-9px;background-size:11px,auto}
+  .radio-card-body::before{width:18px;height:18px;margin-top:-9px}
+  .radio-card input:checked+.radio-card-body::before{border-width:2px}
+  /* Identify keeps its place in the grid */
+  .identify-card:has(input[value="identify"]:checked){grid-column:auto}
+  .identify-card:has(input[value="identify"]:checked) .radio-card-body{border-radius:14px}
+  /* …and its two options appear right above Generate */
+  .test-setup:has(input[value="identify"]:checked) .identify-modes.is-detached{display:grid;grid-template-columns:1fr 1fr;gap:8px;
+    margin:0 0 12px;padding:0;border:0;background:none;animation:fadeUp .45s var(--ease-out)}
+  .identify-modes.is-detached .mode-chip>span{padding:10px 12px;border-radius:14px}
+  .identify-modes.is-detached .mode-chip b{font-size:13px}
+}
+/* selected Identify option, also when the options sit above Generate (phones) */
+.test-setup:has(input[value="identify"]:checked) .identify-modes.is-detached .mode-chip input:checked+span{background:var(--grad-sacred);color:#fff;border-color:transparent;box-shadow:var(--glow)}
+.test-setup:has(input[value="identify"]:checked) .identify-modes.is-detached .mode-chip input:checked+span .material-symbols-outlined{color:rgba(255,255,255,.92)}
